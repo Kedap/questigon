@@ -1,0 +1,25 @@
+{
+  "Nombre": "Matematicas discretas aplicadas",
+  "Preguntas": [
+    {
+      "Pregunta": "¿Que dia fue el eclipse solar?",
+      "Respuestas": ["Viernes", "Sabado", "Domingo", "Lunes"],
+      "RespuestaCorrecta": 2
+    },
+    {
+      "Pregunta": "¿Cual de los siguientes lenguajes estan orientados a objetos?",
+      "Respuestas": ["Java", "Fortran", "Haskell", "Perl"],
+      "RespuestaCorrecta": 1
+    },
+    {
+      "Pregunta": "¿Que es una preposición?",
+      "Respuestas": [
+        "No lo se",
+        "Porque si",
+        "Una forma de ver las matematicas",
+        "Firefox"
+      ],
+      "RespuestaCorrecta": 3
+    }
+  ]
+}
