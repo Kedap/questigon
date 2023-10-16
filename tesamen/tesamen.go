@@ -2,12 +2,19 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
 	"github.com/fatih/color"
 )
+
+type JsonExamen struct {
+	Nombre    string
+	Preguntas []PPregunta
+}
 
 type Estudiante struct {
 	Nombre                   string
@@ -180,21 +187,36 @@ func main() {
 	}
 	mostrarPantalla(&instrucciones)
 	fmt.Scanln()
-	eclipse := PPregunta{
-		PantallaCompuesta: &PantallaCompuesta{
-			PantallaSimple: &PantallaSimple{
-				TituloExamen: "Prueba en Go",
-				Descripcion:  "1 de 10",
-			},
-			titulo:           "¿Que dia fue el eclipse solar?",
-			preguntasTotales: 10,
-		},
-		Pregunta:              "¿Que dia fue el eclipse solar?",
-		Respuestas:            []string{"Viernes", "Sabado", "Domingo", "Lunes"},
-		RespuestaCorrecta:     2,
-		estudiante:            &daniel,
-		respuestaSeleccionada: 0,
-		respuestaElegida:      0,
+	fmt.Println("Leyendo examen...")
+	jsonFile, err := os.Open("examen.json")
+	if err != nil {
+		fmt.Println("Ocurrio un error al leer el examen:c")
+		os.Exit(1)
 	}
-	mostrarPantalla(&eclipse)
+	defer jsonFile.Close()
+	valorBytes, _ := io.ReadAll(jsonFile)
+	var examen JsonExamen
+	json.Unmarshal(valorBytes, &examen)
+	fmt.Println(examen)
+	fmt.Scanln()
+	// examen.Preguntas[0] = PPregunta{
+	// 	PantallaCompuesta: &PantallaCompuesta{
+	// 		PantallaSimple: &PantallaSimple{
+	// 			TituloExamen: "Prueba en Go",
+	// 			Descripcion:  "1 de 10",
+	// 		},
+	// 		titulo:           "¿Que dia fue el eclipse solar?",
+	// 		preguntasTotales: 10,
+	// 	},
+	// 	estudiante: &daniel,
+	// }
+	examen.Preguntas[1].PantallaCompuesta = &PantallaCompuesta{
+		PantallaSimple: &PantallaSimple{
+			TituloExamen: "Prueba en Go",
+			Descripcion:  "1 de 10",
+		},
+		titulo:           "¿Que dia fue el eclipse solar?",
+		preguntasTotales: 10,
+	}
+	mostrarPantalla(&examen.Preguntas[1])
 }
