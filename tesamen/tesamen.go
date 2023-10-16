@@ -73,6 +73,9 @@ func mostrarPantalla(p Pantalla) {
 	case *PantallaConfirmacion:
 		p.Cabezero()
 		p.cuerpo()
+	case *PantallaCalif:
+		p.Cabezero()
+		p.cuerpo()
 	default:
 		err := termbox.Init()
 		if err != nil {
@@ -174,6 +177,31 @@ func (p *PantallaConfirmacion) cuerpo() {
 	}
 }
 
+type PantallaCalif struct {
+	*PantallaCompuesta
+	estudiante *Estudiante
+}
+
+func (p *PantallaCalif) Cabezero() {
+	fmt.Printf("\x1bc")
+	estiloTitulo := color.New(color.FgYellow).Add(color.Bold)
+	fmt.Printf("\t\t\t--==[ %s ]==--\n\n%s\n\n\t\t\t", p.TituloExamen, p.Descripcion)
+	estiloTitulo.Print(strings.ToUpper(p.titulo))
+	fmt.Printf("\n\n\t%s\t%d\n\t\t%d/%d\n\n\t\t", p.estudiante.Nombre, p.estudiante.Grupo, p.estudiante.preguntasCorrectas, p.preguntasTotales)
+	promedio := (p.estudiante.preguntasCorrectas * 100) / p.preguntasTotales
+	estiloCalif := color.New()
+	if promedio >= 70 {
+		estiloCalif.Add(color.FgGreen).Add(color.Bold)
+		estiloCalif.Println("APROVADO!!!")
+	} else {
+		estiloCalif.Add(color.FgRed).Add(color.Bold)
+		estiloCalif.Println("NO APROVADO")
+	}
+	for {
+		time.Sleep(time.Minute)
+	}
+}
+
 type PantallaTutorial struct {
 	*PantallaCompuesta
 	instrucciones string
@@ -190,20 +218,23 @@ type PPregunta struct {
 	Pregunta              string
 	Respuestas            []string
 	RespuestaCorrecta     int
-	estudiante            Estudiante
+	estudiante            *Estudiante
 	respuestaSeleccionada int
 	respuestaElegida      int
 	instrucciones         string
+	respondioBien         bool
 }
 type Pregunta interface {
 	responder()
 }
 
 func (p *PPregunta) responder() {
-	if p.respuestaElegida == p.RespuestaCorrecta {
+	if p.respuestaElegida == p.RespuestaCorrecta-1 && !p.respondioBien {
 		p.estudiante.ResponderBien()
-	} else {
+		p.respondioBien = !p.respondioBien
+	} else if p.respuestaElegida != p.RespuestaCorrecta-1 && p.respondioBien {
 		p.estudiante.ResponderMal()
+		p.respondioBien = !p.respondioBien
 	}
 }
 
@@ -247,6 +278,7 @@ func (p *PPregunta) renderizarPregunta() {
 	p.Cabezero()
 	p.cuerpo()
 	fmt.Println("\n\n", p.instrucciones)
+	p.responder()
 	for {
 		select {
 		case ev := <-canalEventos:
@@ -294,12 +326,22 @@ func main() {
 	valorBytes, _ := io.ReadAll(jsonFile)
 	var examen JsonExamen
 	json.Unmarshal(valorBytes, &examen)
+	primeraCol := PantallaCalif{
+		PantallaCompuesta: &PantallaCompuesta{
+			PantallaSimple: &PantallaSimple{
+				TituloExamen: "Prueba en Go",
+			},
+			titulo:           "Calificaciones",
+			preguntasTotales: 2,
+		},
+		estudiante: &daniel,
+	}
 	seguro := PantallaConfirmacion{
 		PantallaCompuesta: &PantallaCompuesta{
 			PantallaSimple: &PantallaSimple{
 				TituloExamen: "Prueba en Go",
-				PSiguiente:   nil,
-				PAnterior:    &examen.Preguntas[2],
+				PSiguiente:   &primeraCol,
+				PAnterior:    &examen.Preguntas[1],
 			},
 			titulo: "\tSeguro",
 		},
@@ -307,7 +349,7 @@ func main() {
 	examen.Preguntas[2].PantallaCompuesta = &PantallaCompuesta{
 		PantallaSimple: &PantallaSimple{
 			TituloExamen: "Prueba en Go",
-			Descripcion:  "Prueba 1 de 2",
+			Descripcion:  "Prueba 2 de 2",
 			PAnterior:    &examen.Preguntas[1],
 			PSiguiente:   &seguro,
 		},
@@ -315,16 +357,18 @@ func main() {
 		preguntasTotales: 10,
 	}
 	examen.Preguntas[2].instrucciones = "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción"
+	examen.Preguntas[2].estudiante = &daniel
 	examen.Preguntas[1].PantallaCompuesta = &PantallaCompuesta{
 		PantallaSimple: &PantallaSimple{
 			TituloExamen: "Prueba en Go",
-			Descripcion:  "Prueba 2 de 2",
+			Descripcion:  "Prueba 1 de 2",
 			PSiguiente:   &examen.Preguntas[2],
 		},
 		titulo:           "¿Que dia fue el eclipse solar?",
 		preguntasTotales: 10,
 	}
 	examen.Preguntas[1].instrucciones = "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción"
+	examen.Preguntas[1].estudiante = &daniel
 	const TEXTO_TUTORIAL = `
           <- (Flecha izquierda) Ir a la anterior
 
