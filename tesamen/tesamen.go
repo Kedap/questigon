@@ -70,6 +70,9 @@ func mostrarPantalla(p Pantalla) {
 		mostrarPantalla(p.ObtenerSiguiente())
 	case *PPregunta:
 		p.renderizarPregunta()
+	case *PantallaConfirmacion:
+		p.Cabezero()
+		p.cuerpo()
 	default:
 		err := termbox.Init()
 		if err != nil {
@@ -145,6 +148,30 @@ type PantallaCompuesta struct {
 func (p *PantallaCompuesta) Cabezero() {
 	fmt.Printf("\x1bc")
 	fmt.Printf("\t\t\t--==[ %s ]==--\n\n%s\n\n\t\t\t%s\n\n", p.TituloExamen, p.Descripcion, strings.ToUpper(p.titulo))
+}
+
+type PantallaConfirmacion struct {
+	*PantallaCompuesta
+}
+
+func (p *PantallaConfirmacion) cuerpo() {
+	fmt.Println("Escribe \"ESTOY DE ACUERDO\" para dar tu calaficación.")
+	fmt.Println("Importante: Hacer esta acción ya no te dejara retroceder a las preguntas")
+	fmt.Println("Al igual de modificar las respuestas del examen.")
+	fmt.Print("\n> ")
+	lector := bufio.NewReader(os.Stdin)
+	aceptacion, err := lector.ReadString('\n')
+	if err != nil {
+		println("Ocurrio un error al leer la entrada :c\nPulse ENTER para salir del programa")
+		fmt.Scanln()
+		os.Exit(1)
+	}
+	aceptacion = strings.Trim(aceptacion, "\n")
+	if aceptacion == "ESTOY DE ACUERDO" {
+		mostrarPantalla(p.ObtenerSiguiente())
+	} else {
+		mostrarPantalla(p.ObtenerAnterior())
+	}
 }
 
 type PantallaTutorial struct {
@@ -267,11 +294,22 @@ func main() {
 	valorBytes, _ := io.ReadAll(jsonFile)
 	var examen JsonExamen
 	json.Unmarshal(valorBytes, &examen)
+	seguro := PantallaConfirmacion{
+		PantallaCompuesta: &PantallaCompuesta{
+			PantallaSimple: &PantallaSimple{
+				TituloExamen: "Prueba en Go",
+				PSiguiente:   nil,
+				PAnterior:    &examen.Preguntas[2],
+			},
+			titulo: "\tSeguro",
+		},
+	}
 	examen.Preguntas[2].PantallaCompuesta = &PantallaCompuesta{
 		PantallaSimple: &PantallaSimple{
 			TituloExamen: "Prueba en Go",
 			Descripcion:  "Prueba 1 de 2",
 			PAnterior:    &examen.Preguntas[1],
+			PSiguiente:   &seguro,
 		},
 		titulo:           "¿Que dia es hoy?",
 		preguntasTotales: 10,
