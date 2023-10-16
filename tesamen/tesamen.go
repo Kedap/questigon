@@ -65,10 +65,12 @@ func (p *PantallaIncio) cuerpo() {
 		fmt.Scanln()
 		os.Exit(1)
 	}
-	p.Estudiante.Nombre = strings.ToUpper(strings.Trim(nombre, "\n"))
+	nombre = strings.ToUpper(nombre)
+	p.Estudiante.Nombre = strings.Trim(nombre, "\n")
 	fmt.Print("\n\nIngresa tu grupo\n> ")
 	fmt.Scanln(&p.Estudiante.Grupo)
-	fmt.Printf("\nEres %s del grupo %d\n¿Es correcto? [S/n]: ", p.Estudiante.Nombre, p.Estudiante.Grupo)
+	fmt.Printf("\nNombre: %sGrupo: %d\n", nombre, p.Estudiante.Grupo)
+	fmt.Print("¿Es correcto? [S/n]: ")
 	var opc string
 	fmt.Scanln(&opc)
 	if strings.ToLower(opc) != "s" {
