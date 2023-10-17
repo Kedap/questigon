@@ -37,11 +37,16 @@ func mostrarPantalla(p Pantalla) {
 		p.Cabezero()
 		p.cuerpo()
 		mostrarPantalla(p.ObtenerSiguiente())
+	case *TutorialPregunta:
+		p.renderizarPregunta()
 	case *PPregunta:
 		p.renderizarPregunta()
 	case *PantallaConfirmacion:
 		p.Cabezero()
 		p.cuerpo()
+	case *TutorialCalificacion:
+		p.Cabezero()
+		mostrarPantalla(p.ObtenerSiguiente())
 	case *PantallaCalif:
 		p.Cabezero()
 		p.cuerpo()

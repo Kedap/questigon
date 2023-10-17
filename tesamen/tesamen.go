@@ -66,6 +66,65 @@ func main() {
 	}
 	examen.Preguntas[1].instrucciones = "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción"
 	examen.Preguntas[1].estudiante = &daniel
+	tutorialCalf := TutorialCalificacion{
+		PantallaCalif: &PantallaCalif{
+			PantallaCompuesta: &PantallaCompuesta{
+				PantallaSimple: &PantallaSimple{
+					TituloExamen: "Prueba en Go",
+					PSiguiente:   &examen.Preguntas[1],
+				},
+				titulo:           "Calificaciones",
+				preguntasTotales: 2,
+			},
+			estudiante: &daniel,
+		},
+	}
+	segundaTutorial := TutorialPregunta{
+		PPregunta: &PPregunta{
+			PantallaCompuesta: &PantallaCompuesta{
+				PantallaSimple: &PantallaSimple{
+					TituloExamen: "Prueba en Go",
+					Descripcion:  "Prueba 2 de 2",
+				},
+				titulo:           "Un ejemplo de verbo es...",
+				preguntasTotales: 2,
+			},
+			Pregunta:          "Un ejemplo de verbo es...",
+			Respuestas:        []string{"Pregunta", "Rotormartillo", "Correr"},
+			RespuestaCorrecta: 3,
+			estudiante:        &daniel,
+		},
+	}
+	tutorialSeguro := PantallaConfirmacion{
+		PantallaCompuesta: &PantallaCompuesta{
+			PantallaSimple: &PantallaSimple{
+				TituloExamen: "Prueba en Go",
+				PSiguiente:   &tutorialCalf,
+				PAnterior:    &segundaTutorial,
+			},
+			titulo: "\tSeguro",
+		},
+	}
+	primeraTutorial := TutorialPregunta{
+		PPregunta: &PPregunta{
+			PantallaCompuesta: &PantallaCompuesta{
+				PantallaSimple: &PantallaSimple{
+					TituloExamen: "Prueba en Go",
+					Descripcion:  "Prueba 1 de 2",
+					PSiguiente:   &segundaTutorial,
+				},
+				titulo:           "¿Cual es el dia de la independencia?",
+				preguntasTotales: 2,
+			},
+			Pregunta:          "¿Cual es el dia de la independencia?",
+			Respuestas:        []string{"11 de noviembre", "16 de septiembre", "2 de marzo"},
+			RespuestaCorrecta: 2,
+			estudiante:        &daniel,
+			instrucciones:     "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción",
+		},
+	}
+	segundaTutorial.PantallaSimple.PAnterior = &primeraTutorial
+	segundaTutorial.PantallaSimple.PSiguiente = &tutorialSeguro
 	const TEXTO_TUTORIAL = `
           <- (Flecha izquierda) Ir a la anterior
 
@@ -84,7 +143,7 @@ func main() {
 			PantallaSimple: &PantallaSimple{
 				TituloExamen: "Prueba en Go",
 				Descripcion:  "Tutorial",
-				PSiguiente:   &examen.Preguntas[1],
+				PSiguiente:   &primeraTutorial,
 			},
 			titulo: "instrucciones",
 		},

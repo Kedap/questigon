@@ -4,60 +4,26 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/nsf/termbox-go"
 )
 
-type PPregunta struct {
-	*PantallaCompuesta
-	Pregunta              string
-	Respuestas            []string
-	RespuestaCorrecta     int
-	estudiante            *Estudiante
-	respuestaSeleccionada int
-	respuestaElegida      int
-	instrucciones         string
-	respondioBien         bool
-}
-type Pregunta interface {
-	responder()
+type TutorialPregunta struct {
+	*PPregunta
 }
 
-func (p *PPregunta) responder() {
+func (p *TutorialPregunta) responder() {
 	if p.respuestaElegida == p.RespuestaCorrecta-1 && !p.respondioBien {
-		p.estudiante.ResponderBien()
+		p.estudiante.ResponderPruebaBien()
 		p.respondioBien = !p.respondioBien
 	} else if p.respuestaElegida != p.RespuestaCorrecta-1 && p.respondioBien {
-		p.estudiante.ResponderMal()
+		p.estudiante.ResponderPruebaMal()
 		p.respondioBien = !p.respondioBien
 	}
 }
-
-func (p *PPregunta) Cabezero() {
-	fmt.Printf("\x1bc")
-	fmt.Printf("\t\t\t--==[ %s ]==--\n\n%s\n\n\t\t\t", p.TituloExamen, p.Descripcion)
-	estiloPregunta := color.New(color.FgWhite).Add(color.Italic).Add(color.Bold)
-	estiloPregunta.Println(p.titulo)
-}
-func (p *PPregunta) cuerpo() {
-	estiloRespuesta := color.New(color.FgWhite).Add(color.BgMagenta).Add(color.Bold)
-	for i, e := range p.Respuestas {
-		var respuesta string
-		if i == p.respuestaElegida {
-			respuesta = "[*] " + e
-		} else {
-			respuesta = "[ ] " + e
-		}
-		if i == p.respuestaSeleccionada {
-			estiloRespuesta.Println(respuesta)
-		} else {
-			fmt.Println(respuesta)
-		}
-	}
-}
-
-func (p *PPregunta) renderizarPregunta() {
+func (p *TutorialPregunta) renderizarPregunta() {
 	err := termbox.Init()
 	if err != nil {
 		fmt.Println("Oh no, ocurrio el error al inicializar los controladores:", err)
@@ -114,4 +80,28 @@ func (p *PPregunta) renderizarPregunta() {
 			}
 		}
 	}
+}
+
+type TutorialCalificacion struct {
+	*PantallaCalif
+}
+
+func (p *TutorialCalificacion) Cabezero() {
+	const N_PREGUNTAS_TUTORIAL = 2
+	fmt.Printf("\x1bc")
+	estiloTitulo := color.New(color.FgYellow).Add(color.Bold)
+	fmt.Printf("\t\t\t--==[ %s ]==--\n\n%s\n\n\t\t\t", p.TituloExamen, p.Descripcion)
+	estiloTitulo.Print(strings.ToUpper(p.titulo))
+	fmt.Printf("\n\n\t%s\t%d\n\t\t%d/%d\n\n\t\t", p.estudiante.Nombre, p.estudiante.Grupo, p.estudiante.preguntasPruebaCorrectas, N_PREGUNTAS_TUTORIAL)
+	promedio := (p.estudiante.preguntasPruebaCorrectas * 100) / N_PREGUNTAS_TUTORIAL
+	estiloCalif := color.New()
+	if promedio >= 70 {
+		estiloCalif.Add(color.FgGreen).Add(color.Bold)
+		estiloCalif.Println("APROBADO!!!")
+	} else {
+		estiloCalif.Add(color.FgRed).Add(color.Bold)
+		estiloCalif.Println("NO APROBADO")
+	}
+	fmt.Println("Presiona ENTER para comenzar con el verdadero examen!!!")
+	fmt.Scanln()
 }
