@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -122,18 +123,18 @@ type PantallaIncio struct {
 
 func (p *PantallaIncio) cuerpo() {
 	fmt.Print("\t\tIngresa tu nombre empezando por apellido\n\n> ")
-	lector := bufio.NewReader(os.Stdin)
-	nombre, err := lector.ReadString('\n')
+	lector := bufio.NewScanner(os.Stdin)
+	lector.Scan()
+	err := lector.Err()
 	if err != nil {
 		println("Ocurrio un error al leer la entrada :c\nPulse ENTER para salir del programa")
 		fmt.Scanln()
 		os.Exit(1)
 	}
-	nombre = strings.ToUpper(nombre)
-	p.Estudiante.Nombre = strings.Trim(nombre, "\n")
+	p.Estudiante.Nombre = strings.ToUpper(lector.Text())
 	fmt.Print("\n\nIngresa tu grupo\n> ")
 	fmt.Scanln(&p.Estudiante.Grupo)
-	fmt.Printf("\nNombre: %sGrupo: %d\n", nombre, p.Estudiante.Grupo)
+	fmt.Printf("\nEres %s del grupo %d\n", p.Estudiante.Nombre, p.Estudiante.Grupo)
 	fmt.Print("¿Es correcto? [S/n]: ")
 	var opc string
 	fmt.Scanln(&opc)
@@ -162,15 +163,15 @@ func (p *PantallaConfirmacion) cuerpo() {
 	fmt.Println("Importante: Hacer esta acción ya no te dejara retroceder a las preguntas")
 	fmt.Println("Al igual de modificar las respuestas del examen.")
 	fmt.Print("\n> ")
-	lector := bufio.NewReader(os.Stdin)
-	aceptacion, err := lector.ReadString('\n')
+	lector := bufio.NewScanner(os.Stdin)
+	lector.Scan()
+	err := lector.Err()
 	if err != nil {
 		println("Ocurrio un error al leer la entrada :c\nPulse ENTER para salir del programa")
 		fmt.Scanln()
 		os.Exit(1)
 	}
-	aceptacion = strings.Trim(aceptacion, "\n")
-	if aceptacion == "ESTOY DE ACUERDO" {
+	if lector.Text() == "ESTOY DE ACUERDO" {
 		mostrarPantalla(p.ObtenerSiguiente())
 	} else {
 		mostrarPantalla(p.ObtenerAnterior())
@@ -192,10 +193,10 @@ func (p *PantallaCalif) Cabezero() {
 	estiloCalif := color.New()
 	if promedio >= 70 {
 		estiloCalif.Add(color.FgGreen).Add(color.Bold)
-		estiloCalif.Println("APROVADO!!!")
+		estiloCalif.Println("APROBADO!!!")
 	} else {
 		estiloCalif.Add(color.FgRed).Add(color.Bold)
-		estiloCalif.Println("NO APROVADO")
+		estiloCalif.Println("NO APROBADO")
 	}
 	for {
 		time.Sleep(time.Minute)
@@ -261,8 +262,6 @@ func (p *PPregunta) cuerpo() {
 	}
 }
 func (p *PPregunta) renderizarPregunta() {
-	p.Cabezero()
-	p.cuerpo()
 	err := termbox.Init()
 	if err != nil {
 		fmt.Println("Oh no, ocurrio el error al inicializar los controladores:", err)
@@ -284,31 +283,40 @@ func (p *PPregunta) renderizarPregunta() {
 		case ev := <-canalEventos:
 			if ev.Type == termbox.EventKey {
 				switch {
-				case ev.Ch == 68:
+				case ev.Ch == 68 || ev.Key == termbox.KeyArrowLeft:
 					anterior := p.ObtenerAnterior()
 					if anterior != nil {
+						termbox.Interrupt()
 						termbox.Close()
 						mostrarPantalla(anterior)
 					}
-				case ev.Ch == 67:
+				case ev.Ch == 67 || ev.Key == termbox.KeyArrowRight:
 					siguiente := p.ObtenerSiguiente()
 					if siguiente != nil {
+						termbox.Interrupt()
 						termbox.Close()
 						mostrarPantalla(siguiente)
 					}
-				case ev.Ch == 65:
+				case ev.Ch == 65 || ev.Key == termbox.KeyArrowUp:
 					if p.respuestaSeleccionada-1 != -1 {
 						p.respuestaSeleccionada--
 					}
-				case ev.Ch == 66:
+				case ev.Ch == 66 || ev.Key == termbox.KeyArrowDown:
 					if p.respuestaSeleccionada+1 != len(p.Respuestas) {
 						p.respuestaSeleccionada++
 					}
 				case ev.Key == termbox.KeyEnter:
 					p.respuestaElegida = p.respuestaSeleccionada
 					p.responder()
+				default:
+					fmt.Println(ev.Ch)
+
 				}
-				time.Sleep(60 * time.Microsecond)
+
+				if runtime.GOOS == "windows" {
+					termbox.Interrupt()
+					termbox.Close()
+				}
 				p.renderizarPregunta()
 			}
 		}
@@ -341,7 +349,7 @@ func main() {
 			PantallaSimple: &PantallaSimple{
 				TituloExamen: "Prueba en Go",
 				PSiguiente:   &primeraCol,
-				PAnterior:    &examen.Preguntas[1],
+				PAnterior:    &examen.Preguntas[2],
 			},
 			titulo: "\tSeguro",
 		},

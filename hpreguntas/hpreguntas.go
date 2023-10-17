@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 )
 
 type Pregunta struct {
@@ -32,13 +31,14 @@ func main() {
 		rutaArchivo: ruta,
 	}
 	fmt.Print("Ingresa el nombre de tu examen\n> ")
-	lector := bufio.NewReader(os.Stdin)
-	nombre, err := lector.ReadString('\n')
+	lector := bufio.NewScanner(os.Stdin)
+	lector.Scan()
+	err := lector.Err()
 	if err != nil {
 		fmt.Println("Ocurrio un error al leer la entrada :/")
 		os.Exit(1)
 	}
-	nExamen.Nombre = strings.Trim(nombre, "\n")
+	nExamen.Nombre = lector.Text()
 	fmt.Print("¿Cuantas preguntas quieres que tenga tu examen?\n> ")
 	var nPreguntas int
 	fmt.Scanln(&nPreguntas)
@@ -48,24 +48,25 @@ func main() {
 
 	for i := 0; i < nPreguntas; i++ {
 		fmt.Printf("Ingresa tu pregunta %d\n", i+1)
-		nPregunta, err :=
-			lector.ReadString('\n')
+		lector.Scan()
+		err :=
+			lector.Err()
 		if err != nil {
 			fmt.Println("Ocurrio un error al leer la entrada :/")
 			os.Exit(1)
 		}
 		pregunta := Pregunta{
-			Pregunta: strings.Trim(nPregunta, "\n"),
+			Pregunta: lector.Text(),
 		}
 		for j := 0; j < nRespuestas; j++ {
 			fmt.Printf("Ingresa la respuesta %d para la pregunta %d\n", j+1, i+1)
-			respuesta, err :=
-				lector.ReadString('\n')
+			lector.Scan()
+			err := lector.Err()
 			if err != nil {
 				fmt.Println("Ocurrio un error al leer la entrada :/")
 				os.Exit(1)
 			}
-			pregunta.Respuestas = append(pregunta.Respuestas, strings.Trim(respuesta, "\n"))
+			pregunta.Respuestas = append(pregunta.Respuestas, lector.Text())
 		}
 		fmt.Printf("Coloca el número de la respuesta correcta para la pregunta %d (1-%d): ", i+1, nRespuestas)
 		var correcta int
