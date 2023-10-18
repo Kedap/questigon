@@ -70,13 +70,13 @@ func mostrarPantalla(p Pantalla) {
 			case ev := <-canalEventos:
 				if ev.Type == termbox.EventKey {
 					switch {
-					case ev.Ch == 68:
+					case ev.Ch == 68 || ev.Key == termbox.KeyArrowLeft:
 						anterior := p.ObtenerAnterior()
 						if anterior != nil {
 							termbox.Close()
 							mostrarPantalla(anterior)
 						}
-					case ev.Ch == 67:
+					case ev.Ch == 67 || ev.Key == termbox.KeyArrowRight:
 						siguiente := p.ObtenerSiguiente()
 						if siguiente != nil {
 							termbox.Close()
