@@ -92,8 +92,11 @@ func (p *TutorialCalificacion) Cabezero() {
 	estiloTitulo := color.New(color.FgYellow).Add(color.Bold)
 	fmt.Printf("\t\t\t--==[ %s ]==--\n\n%s\n\n\t\t\t", p.TituloExamen, p.Descripcion)
 	estiloTitulo.Print(strings.ToUpper(p.titulo))
-	fmt.Printf("\n\n\t%s\t%d\n\t\t%d/%d\n\n\t\t", p.estudiante.Nombre, p.estudiante.Grupo, p.estudiante.preguntasPruebaCorrectas, N_PREGUNTAS_TUTORIAL)
 	promedio := (p.estudiante.preguntasPruebaCorrectas * 100) / N_PREGUNTAS_TUTORIAL
+	fmt.Printf("\n\n\t%s\t%d\n\t\t%d/%d\t\t\t(%d%%)\n\n\t\t",
+		p.estudiante.Nombre, p.estudiante.Grupo,
+		p.estudiante.preguntasPruebaCorrectas,
+		N_PREGUNTAS_TUTORIAL, promedio)
 	estiloCalif := color.New()
 	if promedio >= 70 {
 		estiloCalif.Add(color.FgGreen).Add(color.Bold)
