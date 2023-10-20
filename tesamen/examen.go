@@ -15,6 +15,11 @@ type Examen struct {
 }
 
 func NuevoExamen(ruta string) Examen {
+	_, err := os.Stat(ruta)
+	if os.IsNotExist(err) {
+		fmt.Println("El arichvo", ruta, "no existe :/")
+		os.Exit(1)
+	}
 	nuevoEstudiante := Estudiante{}
 	jsonFile, err := os.Open("examen.json")
 	if err != nil {
@@ -30,6 +35,10 @@ func NuevoExamen(ruta string) Examen {
 	var nuevoExamen Examen
 	json.Unmarshal(valorBytes, &nuevoExamen)
 	preguntasTotales := len(nuevoExamen.Preguntas)
+	if preguntasTotales == 0 {
+		fmt.Println("El archivo", ruta, "no tiene ninguna pregunta :/")
+		os.Exit(1)
+	}
 	pCalif := PantallaCalif{
 		PantallaCompuesta: &PantallaCompuesta{
 			PantallaSimple: &PantallaSimple{
