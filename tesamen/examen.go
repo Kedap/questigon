@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha1"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -32,6 +33,7 @@ func NuevoExamen(ruta string) Examen {
 		fmt.Println("Ocurrio un error al leer el examen:c")
 		os.Exit(1)
 	}
+	verificarExamen(valorBytes)
 	var nuevoExamen Examen
 	json.Unmarshal(valorBytes, &nuevoExamen)
 	preguntasTotales := len(nuevoExamen.Preguntas)
@@ -189,5 +191,14 @@ func (e *Examen) jsonAPantallas(est *Estudiante) {
 			instrucciones:     "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción",
 		}
 		e.Preguntas[i] = nuevP
+	}
+}
+
+func verificarExamen(b []byte) {
+	const SHA1_ESPERADO = "fd89b1d2a60d80255fd8a396ce2c58ec90524adc"
+	if SHA1_ESPERADO != fmt.Sprintf("%x", sha1.Sum(b)) {
+		fmt.Println("El archivo fue modificado :/\nTu examen no es valido")
+		fmt.Scan()
+		os.Exit(1)
 	}
 }
