@@ -60,7 +60,7 @@ func (p *PPregunta) cuerpo() {
 func (p *PPregunta) renderizarPregunta() {
 	err := termbox.Init()
 	if err != nil {
-		fmt.Println("Oh no, ocurrio el error al inicializar los controladores:", err)
+		fmt.Println("Oh no, ocurrió el error al inicializar los controladores:", err)
 		os.Exit(1)
 	}
 	defer termbox.Close()

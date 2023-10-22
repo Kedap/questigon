@@ -20,19 +20,19 @@ type Examen struct {
 func NuevoExamen(ruta string) Examen {
 	_, err := os.Stat(ruta)
 	if os.IsNotExist(err) {
-		fmt.Println("El arichvo", ruta, "no existe :/")
+		fmt.Println("El archivo", ruta, "no existe :/")
 		os.Exit(1)
 	}
 	nuevoEstudiante := Estudiante{}
 	jsonFile, err := os.Open("examen.json")
 	if err != nil {
-		fmt.Println("Ocurrio un error al leer el examen:c")
+		fmt.Println("Ocurrió un error al leer el examen:c")
 		os.Exit(1)
 	}
 	defer jsonFile.Close()
 	valorBytes, err := io.ReadAll(jsonFile)
 	if err != nil {
-		fmt.Println("Ocurrio un error al leer el examen:c")
+		fmt.Println("Ocurrió un error al leer el examen:c")
 		os.Exit(1)
 	}
 	verificarExamen(valorBytes)
@@ -73,7 +73,7 @@ func NuevoExamen(ruta string) Examen {
 					TituloExamen: nuevoExamen.Nombre,
 					PSiguiente:   &nuevoExamen.Preguntas[0],
 				},
-				titulo:           "Calificaciones",
+				titulo:           "Calificaciones (TUTORIAL)",
 				preguntasTotales: 2,
 			},
 			estudiante: &nuevoEstudiante,
@@ -84,13 +84,13 @@ func NuevoExamen(ruta string) Examen {
 			PantallaCompuesta: &PantallaCompuesta{
 				PantallaSimple: &PantallaSimple{
 					TituloExamen: nuevoExamen.Nombre,
-					Descripcion:  "Prueba 2 de 2",
+					Descripcion:  "Examen de TUTORIAL 2 de 2",
 				},
 				titulo:           "Un ejemplo de verbo es...",
 				preguntasTotales: 2,
 			},
 			Pregunta:          "Un ejemplo de verbo es...",
-			Respuestas:        []string{"Pregunta", "Rotormartillo", "Correr"},
+			Respuestas:        []string{"Pregunta", "Martillo", "Correr"},
 			RespuestaCorrecta: 3,
 			estudiante:        &nuevoEstudiante,
 			instrucciones:     "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción",
@@ -101,13 +101,13 @@ func NuevoExamen(ruta string) Examen {
 			PantallaCompuesta: &PantallaCompuesta{
 				PantallaSimple: &PantallaSimple{
 					TituloExamen: nuevoExamen.Nombre,
-					Descripcion:  "Prueba 1 de 2",
+					Descripcion:  "Examen de TUTORIAL 1 de 2",
 					PSiguiente:   &segundaTutorial,
 				},
-				titulo:           "¿Cual es el dia de la independencia?",
+				titulo:           "¿Cual es el día de la independencia?",
 				preguntasTotales: 2,
 			},
-			Pregunta:          "¿Cual es el dia de la independencia?",
+			Pregunta:          "¿Cual es el día de la independencia?",
 			Respuestas:        []string{"11 de noviembre", "16 de septiembre", "2 de marzo"},
 			RespuestaCorrecta: 2,
 			estudiante:        &nuevoEstudiante,
@@ -149,7 +149,7 @@ func NuevoExamen(ruta string) Examen {
 			titulo: "Instrucciones",
 		},
 		instrucciones: TEXTO_TUTORIAL,
-		msgFinal:      "Las siguientes preguntas solo seran de prueba",
+		msgFinal:      "LAS SIGUIENTES PREGUNTAS SOLO SERÁN DE PRUEBA",
 	}
 	nuevoExamen.primeraPantalla = &PantallaIncio{
 		PantallaSimple: &PantallaSimple{

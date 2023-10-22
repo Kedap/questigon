@@ -53,7 +53,7 @@ func mostrarPantalla(p Pantalla) {
 	default:
 		err := termbox.Init()
 		if err != nil {
-			fmt.Println("Oh no, ocurrio el error", err)
+			fmt.Println("Oh no, ocurrió el error", err)
 			os.Exit(1)
 		}
 		defer termbox.Close()

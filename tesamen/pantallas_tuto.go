@@ -26,7 +26,7 @@ func (p *TutorialPregunta) responder() {
 func (p *TutorialPregunta) renderizarPregunta() {
 	err := termbox.Init()
 	if err != nil {
-		fmt.Println("Oh no, ocurrio el error al inicializar los controladores:", err)
+		fmt.Println("Oh no, ocurrió el error al inicializar los controladores:", err)
 		os.Exit(1)
 	}
 	defer termbox.Close()
@@ -105,6 +105,7 @@ func (p *TutorialCalificacion) Cabezero() {
 		estiloCalif.Add(color.FgRed).Add(color.Bold)
 		estiloCalif.Println("NO APROBADO")
 	}
-	fmt.Println("Presiona ENTER para comenzar con el verdadero examen!!!")
+	fmt.Println(`Bien! has resuelto el examen de prueba que NO TIENE VALOR,
+presiona ENTER para comenzar con el VERADERO EXAMEN`)
 	fmt.Scanln()
 }

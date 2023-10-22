@@ -18,7 +18,7 @@ func (p *PantallaIncio) cuerpo() {
 	lector.Scan()
 	err := lector.Err()
 	if err != nil {
-		println("Ocurrio un error al leer la entrada :c\nPulse ENTER para salir del programa")
+		println("Ocurrió un error al leer la entrada :c\nPulse ENTER para salir del programa")
 		fmt.Scanln()
 		os.Exit(1)
 	}

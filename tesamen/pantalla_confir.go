@@ -11,7 +11,7 @@ type PantallaConfirmacion struct {
 }
 
 func (p *PantallaConfirmacion) cuerpo() {
-	fmt.Println("Escribe \"ESTOY DE ACUERDO\" para dar tu calaficación.")
+	fmt.Println("Escribe \"ESTOY DE ACUERDO\" para dar tu calificación.")
 	fmt.Println("Importante: Hacer esta acción ya no te dejara retroceder a las preguntas")
 	fmt.Println("Al igual de modificar las respuestas del examen.")
 	fmt.Print("\n> ")
@@ -19,7 +19,7 @@ func (p *PantallaConfirmacion) cuerpo() {
 	lector.Scan()
 	err := lector.Err()
 	if err != nil {
-		println("Ocurrio un error al leer la entrada :c\nPulse ENTER para salir del programa")
+		println("Ocurrió un error al leer la entrada :c\nPulse ENTER para salir del programa")
 		fmt.Scanln()
 		os.Exit(1)
 	}
