@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
+	"time"
 )
 
 // Definitivamente es el examen
@@ -195,10 +197,15 @@ func (e *Examen) jsonAPantallas(est *Estudiante) {
 }
 
 func verificarExamen(b []byte) {
-	const SHA1_ESPERADO = "fd89b1d2a60d80255fd8a396ce2c58ec90524adc"
-	if SHA1_ESPERADO != fmt.Sprintf("%x", sha1.Sum(b)) {
+	var sha1_esperado string
+	if runtime.GOOS == "windows" {
+		sha1_esperado = "be4d43e56f4e2bf82f513588023d2280ca63778d"
+	} else {
+		sha1_esperado = "fd89b1d2a60d80255fd8a396ce2c58ec90524adc"
+	}
+	if sha1_esperado != fmt.Sprintf("%x", sha1.Sum(b)) {
 		fmt.Println("El archivo fue modificado :/\nTu examen no es valido")
-		fmt.Scan()
+		time.Sleep(5 * time.Second)
 		os.Exit(1)
 	}
 }
