@@ -10,19 +10,23 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+// Definición de la estructura TutorialPregunta que extiende la estructura PPregunta.
 type TutorialPregunta struct {
-	*PPregunta
+	*PPregunta // Referencia a una pregunta en forma de tutorial.
 }
 
+// Implementación del método responder para TutorialPregunta.
 func (p *TutorialPregunta) responder() {
+	// Comprueba si la respuesta elegida por el estudiante en el tutorial es correcta.
 	if p.respuestaElegida == p.RespuestaCorrecta-1 && !p.respondioBien {
-		p.estudiante.ResponderPruebaBien()
-		p.respondioBien = !p.respondioBien
+		p.estudiante.ResponderPruebaBien() // Incrementa la cantidad de preguntas de prueba respondidas correctamente por el estudiante.
+		p.respondioBien = !p.respondioBien // Cambia el estado de "respondioBien" para evitar múltiples incrementos.
 	} else if p.respuestaElegida != p.RespuestaCorrecta-1 && p.respondioBien {
-		p.estudiante.ResponderPruebaMal()
-		p.respondioBien = !p.respondioBien
+		p.estudiante.ResponderPruebaMal()  // Decrementa la cantidad de preguntas de prueba respondidas correctamente por el estudiante.
+		p.respondioBien = !p.respondioBien // Cambia el estado de "respondioBien" para evitar múltiples decrementos.
 	}
 }
+
 func (p *TutorialPregunta) renderizarPregunta() {
 	err := termbox.Init()
 	if err != nil {
@@ -82,22 +86,30 @@ func (p *TutorialPregunta) renderizarPregunta() {
 	}
 }
 
+// Definición de la estructura TutorialCalificacion que extiende la estructura PantallaCalif.
 type TutorialCalificacion struct {
-	*PantallaCalif
+	*PantallaCalif // Referencia a una pantalla de calificación.
 }
 
+// Implementación del método Cabezero para TutorialCalificacion.
 func (p *TutorialCalificacion) Cabezero() {
-	const N_PREGUNTAS_TUTORIAL = 2
-	fmt.Printf("\x1bc")
-	estiloTitulo := color.New(color.FgYellow).Add(color.Bold)
+	const N_PREGUNTAS_TUTORIAL = 2                            // Número de preguntas en el tutorial.
+	fmt.Printf("\x1bc")                                       // Limpia la pantalla.
+	estiloTitulo := color.New(color.FgYellow).Add(color.Bold) // Configura el estilo del título.
 	fmt.Printf("\t\t\t--==[ %s ]==--\n\n%s\n\n\t\t\t", p.TituloExamen, p.Descripcion)
-	estiloTitulo.Print(strings.ToUpper(p.titulo))
+	estiloTitulo.Print(strings.ToUpper(p.titulo)) // Muestra el título en mayúsculas.
+
+	// Calcula el promedio de las respuestas correctas en el tutorial y lo muestra junto con otros detalles del estudiante.
 	promedio := (p.estudiante.preguntasPruebaCorrectas * 100) / N_PREGUNTAS_TUTORIAL
 	fmt.Printf("\n\n\t%s\t%d\n\t\t%d/%d\t\t\t(%d%%)\n\n\t\t",
 		p.estudiante.Nombre, p.estudiante.Grupo,
 		p.estudiante.preguntasPruebaCorrectas,
 		N_PREGUNTAS_TUTORIAL, promedio)
-	estiloCalif := color.New()
+
+	estiloCalif := color.New() // Configura el estilo de la calificación.
+
+	// Muestra "APROBADO!!!" en verde y en negrita si el promedio es igual o mayor al 70%.
+	// Muestra "NO APROBADO" en rojo y en negrita si el promedio es menor al 70%.
 	if promedio >= 70 {
 		estiloCalif.Add(color.FgGreen).Add(color.Bold)
 		estiloCalif.Println("APROBADO!!!")
@@ -107,5 +119,5 @@ func (p *TutorialCalificacion) Cabezero() {
 	}
 	fmt.Println(`Bien! has resuelto el examen de prueba que NO TIENE VALOR,
 presiona ENTER para comenzar con el VERADERO EXAMEN`)
-	fmt.Scanln()
+	fmt.Scanln() // Espera a que el usuario presione Enter para continuar con el examen real.
 }

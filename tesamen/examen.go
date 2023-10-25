@@ -10,39 +10,60 @@ import (
 	"time"
 )
 
-// Definitivamente es el examen
+/*
+La estructura Examen almacena información sobre el examen, incluyendo su
+nombre, una lista de preguntas (Preguntas), y la primera pantalla que se
+mostrará al comenzar el examen (primeraPantalla).
+
+Definición de la estructura Examen que representa un examen.
+*/
 type Examen struct {
 	Nombre          string
 	Preguntas       []PPregunta
 	primeraPantalla Pantalla
 }
 
+/*
+La función NuevoExamen se encarga de crear una instancia de Examen a partir de
+un archivo JSON, configurando sus componentes, incluyendo pantallas de inicio,
+preguntas, tutoriales y pantallas de calificación
+
+Función NuevoExamen crea y configura un nuevo examen a partir de un archivo JSON.
+*/
 func NuevoExamen(ruta string) Examen {
 	_, err := os.Stat(ruta)
 	if os.IsNotExist(err) {
 		fmt.Println("El archivo", ruta, "no existe :/")
 		os.Exit(1)
 	}
-	nuevoEstudiante := Estudiante{}
-	jsonFile, err := os.Open("examen.json")
+
+	nuevoEstudiante := Estudiante{} // Crea una instancia de Estudiante.
+
+	jsonFile, err := os.Open("examen.json") // Abre el archivo JSON del examen.
 	if err != nil {
 		fmt.Println("Ocurrió un error al leer el examen:c")
 		os.Exit(1)
 	}
 	defer jsonFile.Close()
-	valorBytes, err := io.ReadAll(jsonFile)
+
+	valorBytes, err := io.ReadAll(jsonFile) // Lee el contenido del archivo JSON.
 	if err != nil {
 		fmt.Println("Ocurrió un error al leer el examen:c")
 		os.Exit(1)
 	}
-	verificarExamen(valorBytes)
-	var nuevoExamen Examen
-	json.Unmarshal(valorBytes, &nuevoExamen)
-	preguntasTotales := len(nuevoExamen.Preguntas)
+
+	verificarExamen(valorBytes) // Verifica el formato del examen JSON.
+
+	var nuevoExamen Examen                   // Crea una instancia de Examen.
+	json.Unmarshal(valorBytes, &nuevoExamen) // Decodifica el JSON en la instancia de Examen.
+
+	preguntasTotales := len(nuevoExamen.Preguntas) // Obtiene la cantidad de preguntas en el examen.
 	if preguntasTotales == 0 {
 		fmt.Println("El archivo", ruta, "no tiene ninguna pregunta :/")
 		os.Exit(1)
 	}
+
+	// Configura una pantalla de calificación para el examen.
 	pCalif := PantallaCalif{
 		PantallaCompuesta: &PantallaCompuesta{
 			PantallaSimple: &PantallaSimple{
@@ -53,6 +74,8 @@ func NuevoExamen(ruta string) Examen {
 		},
 		estudiante: &nuevoEstudiante,
 	}
+
+	// Convierte el examen en una secuencia de pantallas y configura la pantalla de confirmación.
 	nuevoExamen.jsonAPantallas(&nuevoEstudiante)
 	pConfir := PantallaConfirmacion{
 		PantallaCompuesta: &PantallaCompuesta{
@@ -66,6 +89,8 @@ func NuevoExamen(ruta string) Examen {
 		},
 	}
 	nuevoExamen.Preguntas[preguntasTotales-1].PSiguiente = &pConfir
+
+	// Configura una pantalla de calificación para el tutorial.
 	tutorialCalf := TutorialCalificacion{
 		PantallaCalif: &PantallaCalif{
 			PantallaCompuesta: &PantallaCompuesta{
@@ -79,6 +104,8 @@ func NuevoExamen(ruta string) Examen {
 			estudiante: &nuevoEstudiante,
 		},
 	}
+
+	// Configura las preguntas de tutorial.
 	segundaTutorial := TutorialPregunta{
 		PPregunta: &PPregunta{
 			PantallaCompuesta: &PantallaCompuesta{
@@ -96,6 +123,7 @@ func NuevoExamen(ruta string) Examen {
 			instrucciones:     "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción",
 		},
 	}
+
 	primeraTutorial := TutorialPregunta{
 		PPregunta: &PPregunta{
 			PantallaCompuesta: &PantallaCompuesta{
@@ -114,6 +142,7 @@ func NuevoExamen(ruta string) Examen {
 			instrucciones:     "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción",
 		},
 	}
+
 	segundaTutorial.PAnterior = &primeraTutorial
 	tutorialConfr := PantallaConfirmacion{
 		PantallaCompuesta: &PantallaCompuesta{
@@ -125,7 +154,9 @@ func NuevoExamen(ruta string) Examen {
 			titulo: "\tSeguro",
 		},
 	}
+
 	segundaTutorial.PSiguiente = &tutorialConfr
+
 	const TEXTO_TUTORIAL = `
           <- (Flecha izquierda) Ir a la anterior
 
@@ -139,6 +170,7 @@ func NuevoExamen(ruta string) Examen {
 
           ENTER Elegir la opción
         `
+
 	instrucciones := PantallaTutorial{
 		PantallaCompuesta: &PantallaCompuesta{
 			PantallaSimple: &PantallaSimple{
@@ -151,6 +183,8 @@ func NuevoExamen(ruta string) Examen {
 		instrucciones: TEXTO_TUTORIAL,
 		msgFinal:      "LAS SIGUIENTES PREGUNTAS SOLO SERÁN DE PRUEBA",
 	}
+
+	// Configura la primera pantalla de inicio del examen.
 	nuevoExamen.primeraPantalla = &PantallaIncio{
 		PantallaSimple: &PantallaSimple{
 			TituloExamen: nuevoExamen.Nombre,
@@ -162,10 +196,21 @@ func NuevoExamen(ruta string) Examen {
 	return nuevoExamen
 }
 
+/*
+La función toma las preguntas de un examen, las convierte en pantallas de
+preguntas y configura las relaciones entre las pantallas, como la pantalla
+siguiente y anterior
+
+jsonAPantallas convierte las preguntas del examen en pantallas de preguntas y las configura.
+*/
 func (e *Examen) jsonAPantallas(est *Estudiante) {
 	preguntasTotales := len(e.Preguntas) - 1
+
+	// Itera a través de las preguntas y crea las pantallas correspondientes.
 	for i, v := range e.Preguntas {
 		var siguiente, anterior Pantalla
+
+		// Configura la pantalla siguiente y anterior según la posición de la pregunta.
 		if i == preguntasTotales {
 			siguiente = nil
 		} else {
@@ -176,33 +221,49 @@ func (e *Examen) jsonAPantallas(est *Estudiante) {
 		} else {
 			anterior = &e.Preguntas[i-1]
 		}
-		nuevP := PPregunta{
+
+		// Crea una nueva pantalla de pregunta a partir de la pregunta original.
+		nuevaPregunta := PPregunta{
 			PantallaCompuesta: &PantallaCompuesta{
-				PantallaSimple: &PantallaSimple{TituloExamen: e.Nombre,
+				PantallaSimple: &PantallaSimple{
+					TituloExamen: e.Nombre,
 					Descripcion: fmt.Sprintf("%d de %d",
 						i+1,
 						preguntasTotales+1),
 					PSiguiente: siguiente,
-					PAnterior:  anterior},
+					PAnterior:  anterior,
+				},
 				titulo:           v.Pregunta,
-				preguntasTotales: preguntasTotales + 1},
+				preguntasTotales: preguntasTotales + 1,
+			},
 			Pregunta:          v.Pregunta,
 			Respuestas:        v.Respuestas,
 			RespuestaCorrecta: v.RespuestaCorrecta,
 			estudiante:        est,
 			instrucciones:     "\t<- Ir a la anterior  -> Ir a la siguiente\n\t/\\ Seleccionar arriba \\/ Seleccionar abajo \n\tENTER elegir opción",
 		}
-		e.Preguntas[i] = nuevP
+		e.Preguntas[i] = nuevaPregunta
 	}
 }
 
+/*
+La función calcula el hash SHA-1 del archivo de examen y lo compara con un
+valor esperado específico para el sistema operativo en uso. Si los valores no
+coinciden, se imprime un mensaje de que el archivo fue modificado y el programa
+se cierra. Esta función se utiliza para garantizar que el archivo del examen no
+haya sido alterado.
+
+verificarExamen verifica la integridad del archivo de examen mediante un hash SHA-1.
+*/
 func verificarExamen(b []byte) {
 	var sha1_esperado string
+	// Determina el valor esperado de SHA-1 basado en el sistema operativo.
 	if runtime.GOOS == "windows" {
 		sha1_esperado = "be4d43e56f4e2bf82f513588023d2280ca63778d"
 	} else {
 		sha1_esperado = "661cb8c527194d7bfe38c99d9dc758b3b64121ea"
 	}
+	// Calcula el hash SHA-1 del archivo y lo compara con el valor esperado.
 	if sha1_esperado != fmt.Sprintf("%x", sha1.Sum(b)) {
 		fmt.Println("El archivo fue modificado :/\nTu examen no es valido")
 		time.Sleep(5 * time.Second)
