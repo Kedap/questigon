@@ -9,6 +9,6 @@ type PantallaTutorial struct {
 }
 
 func (p *PantallaTutorial) cuerpo() {
-	fmt.Println(p.instrucciones, "\nEl examen tiene", p.preguntasTotales, "preguntas")
+	fmt.Println(p.instrucciones)
 	fmt.Println(p.msgFinal)
 }

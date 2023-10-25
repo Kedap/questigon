@@ -11,9 +11,10 @@ type PantallaConfirmacion struct {
 }
 
 func (p *PantallaConfirmacion) cuerpo() {
-	fmt.Println("Escribe \"ESTOY DE ACUERDO\" para dar tu calificación.")
+	fmt.Println("Escribe \"ESTOY DE ACUERDO\" en MAYÚSCULAS para dar tu calificación.")
 	fmt.Println("Importante: Hacer esta acción ya no te dejara retroceder a las preguntas")
 	fmt.Println("Al igual de modificar las respuestas del examen.")
+	fmt.Println("En el caso de escribir otra cosa, podrá modificar el las respuestas del examen")
 	fmt.Print("\n> ")
 	lector := bufio.NewScanner(os.Stdin)
 	lector.Scan()
