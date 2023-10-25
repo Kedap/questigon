@@ -23,3 +23,15 @@ func main() {
 	// Muestra la primera pantalla del examen para comenzar.
 	mostrarPantalla(examenMates.primeraPantalla)
 }
+
+/*
+Los binarios de Go pueden generar falsos positivos en los antivirus debido a la
+forma en que Go compila y empaqueta sus aplicaciones. Puede consultar las
+razones en los enlaces que explican por qué los binarios de Go pueden ser
+marcados como falsos positivos por los antivirus
+
+https://go.dev/doc/faq#virus
+https://groups.google.com/g/golang-nuts/c/Au1FbtTZzbk
+https://github.com/golang/go/issues/44323
+https://github.com/golang/go/issues/55042
+*/
