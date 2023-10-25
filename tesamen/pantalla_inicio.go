@@ -29,6 +29,7 @@ func (p *PantallaIncio) cuerpo() {
 	fmt.Print("¿Es correcto? [S/n]: ")
 	var opc string
 	fmt.Scanln(&opc)
+	opc = opc[0:1]
 	if strings.ToLower(opc) != "s" {
 		mostrarPantalla(p)
 	}
