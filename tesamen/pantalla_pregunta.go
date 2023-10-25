@@ -132,13 +132,13 @@ func (p *PPregunta) renderizarPregunta() {
 				case ev.Key == termbox.KeyEnter:
 					p.respuestaElegida = p.respuestaSeleccionada // Registra la respuesta elegida por el estudiante.
 					p.responder()                                // Llama al método responder para evaluar la respuesta.
-
-					if runtime.GOOS == "windows" {
-						termbox.Interrupt()
-						termbox.Close()
-					}
-					p.renderizarPregunta() // Renderiza nuevamente la pregunta.
 				}
+
+				if runtime.GOOS == "windows" {
+					termbox.Interrupt()
+					termbox.Close()
+				}
+				p.renderizarPregunta() // Renderiza nuevamente la pregunta.
 			}
 		}
 	}

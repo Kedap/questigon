@@ -23,7 +23,7 @@
     },
     {
       "Pregunta": "¿Cuál de las siguientes proposiciones siempre da verdadero (tautología)?",
-      "Respuestas": ["P ∨ ¬P", "P ∧ Q", "P ↔ Q", "P ⊕ Q"],
+      "Respuestas": ["P o ¬P", "P y Q", "P ↔ Q", "P o Q"],
       "RespuestaCorrecta": 1
     },
     {
@@ -47,8 +47,8 @@
       "RespuestaCorrecta": 4
     },
     {
-      "Pregunta": "¿Cuál de las siguientes proposiciones es equivalente a ¬(P ∧ Q)?",
-      "Respuestas": ["P ∨ Q", "P ∧ Q", "¬P ∨ ¬Q", "P ↔ Q"],
+      "Pregunta": "¿Cuál de las siguientes proposiciones es equivalente a ¬(P y Q)?",
+      "Respuestas": ["P o Q", "P y Q", "¬P o ¬Q", "P ↔ Q"],
       "RespuestaCorrecta": 3
     },
     {
@@ -88,11 +88,11 @@
     },
     {
       "Pregunta": "¿Cuál de las siguientes proposiciones es una tautología?",
-      "Respuestas": ["P ∨ Q", "P ∧ Q", "P ↔ Q", "P ⊕ Q"],
+      "Respuestas": ["P o Q", "P y Q", "P ↔ Q", "P o ¬Q"],
       "RespuestaCorrecta": 3
     },
     {
-      "Pregunta": "¿Cuál es el valor de verdad de la proposición compuesta P ∨ (¬P ∧ Q) cuando P es verdadero y Q es falso?",
+      "Pregunta": "¿Cuál es el valor de verdad de la proposición compuesta P o (¬P y Q) cuando P es verdadero y Q es falso?",
       "Respuestas": ["Verdadero", "Falso", "Condicional", "Contingente"],
       "RespuestaCorrecta": 1
     },

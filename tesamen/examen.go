@@ -259,7 +259,7 @@ func verificarExamen(b []byte) {
 	var sha1_esperado string
 	// Determina el valor esperado de SHA-1 basado en el sistema operativo.
 	if runtime.GOOS == "windows" {
-		sha1_esperado = "be4d43e56f4e2bf82f513588023d2280ca63778d"
+		sha1_esperado = "339558623d89d82b95cb9a971664990730c230c5"
 	} else {
 		sha1_esperado = "661cb8c527194d7bfe38c99d9dc758b3b64121ea"
 	}
