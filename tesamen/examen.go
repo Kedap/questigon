@@ -261,7 +261,7 @@ func verificarExamen(b []byte) {
 	if runtime.GOOS == "windows" {
 		sha1_esperado = "339558623d89d82b95cb9a971664990730c230c5"
 	} else {
-		sha1_esperado = "661cb8c527194d7bfe38c99d9dc758b3b64121ea"
+		sha1_esperado = "da8569639ca976d21dc2f276f9208ffd6fb2ae92"
 	}
 	// Calcula el hash SHA-1 del archivo y lo compara con el valor esperado.
 	if sha1_esperado != fmt.Sprintf("%x", sha1.Sum(b)) {
