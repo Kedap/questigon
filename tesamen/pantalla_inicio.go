@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/fatih/color"
 )
 
 /*
@@ -39,9 +42,19 @@ func (p *PantallaIncio) cuerpo() {
 
 	fmt.Print("¿Es correcto? [S/n]: ") // Pregunta al usuario si la información es correcta.
 	var opc string
-	fmt.Scanln(&opc)                 // Lee la respuesta del usuario.
-	opc = opc[0:1]                   // Obtener el primer caracter del string
-	if strings.ToLower(opc) != "s" { // Si la respuesta no es "s" (significa no es correcta), vuelve a mostrar la misma pantalla.
+	fmt.Scanln(&opc) // Lee la respuesta del usuario.
+	opc = opc[0:1]   // Obtener el primer caracter del string
+	opc = strings.ToLower(opc)
+	estiloError := color.New(color.FgRed).Add(color.Bold) // Configura el estilo del título.
+	if opc == "n" {                                       // Si la respuesta no es "s" (significa no es correcta), vuelve a mostrar la misma pantalla.
+		estiloError.Println("Volveras a ingresar tus datos")
+		estiloError.Println("Esta vez ingresalos bien!")
+		time.Sleep(3 * time.Second)
+		mostrarPantalla(p)
+	} else if opc != "s" {
+		estiloError.Println("Tu opción no es valida, solo se acepta S o n")
+		estiloError.Println("Vuelve a intentarlo")
+		time.Sleep(3 * time.Second)
 		mostrarPantalla(p)
 	}
 }
