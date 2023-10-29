@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -36,8 +37,18 @@ func (p *PantallaIncio) cuerpo() {
 	}
 	p.Estudiante.Nombre = strings.ToUpper(lector.Text()) // Almacena el nombre del estudiante en mayúsculas.
 
-	fmt.Print("\n\nIngresa tu grupo\n> ")                                           // Solicita al usuario ingresar el grupo.
-	fmt.Scanln(&p.Estudiante.Grupo)                                                 // Lee el número de grupo ingresado por el usuario.
+	fmt.Print("\n\nIngresa tu grupo\n> ") // Solicita al usuario ingresar el grupo.
+	var grupo string
+	estiloError := color.New(color.FgRed).Add(color.Bold)
+	fmt.Scanln(&grupo) // Lee el número de grupo ingresado por el usuario.
+	nGrupo, err := strconv.Atoi(grupo)
+	if err != nil {
+		estiloError.Println("El grupo debe de ser un numero entero chico :/")
+		estiloError.Println("Vuelve a intentarlo")
+		time.Sleep(3 * time.Second)
+		mostrarPantalla(p)
+	}
+	p.Estudiante.Grupo = nGrupo
 	fmt.Printf("\nEres %s del grupo %d\n", p.Estudiante.Nombre, p.Estudiante.Grupo) // Muestra la información ingresada.
 
 	fmt.Print("¿Es correcto? [S/n]: ") // Pregunta al usuario si la información es correcta.
@@ -45,8 +56,7 @@ func (p *PantallaIncio) cuerpo() {
 	fmt.Scanln(&opc) // Lee la respuesta del usuario.
 	opc = opc[0:1]   // Obtener el primer caracter del string
 	opc = strings.ToLower(opc)
-	estiloError := color.New(color.FgRed).Add(color.Bold) // Configura el estilo del título.
-	if opc == "n" {                                       // Si la respuesta no es "s" (significa no es correcta), vuelve a mostrar la misma pantalla.
+	if opc == "n" { // Si la respuesta no es "s" (significa no es correcta), vuelve a mostrar la misma pantalla.
 		estiloError.Println("Volveras a ingresar tus datos")
 		estiloError.Println("Esta vez ingresalos bien!")
 		time.Sleep(3 * time.Second)
