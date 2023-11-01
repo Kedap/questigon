@@ -6,7 +6,9 @@ módulo principal en Python.
 package main
 
 // En esta sección, se importan varias bibliotecas que se utilizarán
-import "os"
+import (
+	"os"
+)
 
 // main es la función principal del programa.
 func main() {
@@ -19,9 +21,12 @@ func main() {
 		ruta = argumentos[1]
 	}
 	// Crea una instancia de examen a partir del archivo JSON especificado.
-	examenMates := NuevoExamen(ruta)
+	examenMates, controlador := NuevoExamen(ruta)
 	// Muestra la primera pantalla del examen para comenzar.
 	mostrarPantalla(examenMates.primeraPantalla)
+	controlador.ejecutar()
+	mostrarPantalla(examenMates.primeraPantalla.ObtenerSiguiente())
+	controlador.Escuchar()
 }
 
 /*

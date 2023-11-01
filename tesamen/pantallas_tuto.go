@@ -2,12 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"runtime"
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/nsf/termbox-go"
 )
 
 // Definición de la estructura TutorialPregunta que extiende la estructura PPregunta.
@@ -26,64 +23,41 @@ func (p *TutorialPregunta) responder() {
 		p.respondioBien = !p.respondioBien // Cambia el estado de "respondioBien" para evitar múltiples decrementos.
 	}
 }
-
-func (p *TutorialPregunta) renderizarPregunta() {
-	err := termbox.Init()
-	if err != nil {
-		fmt.Println("Oh no, ocurrió el error al inicializar los controladores:", err)
-		os.Exit(1)
-	}
-	defer termbox.Close()
-	canalEventos := make(chan termbox.Event)
-	go func() {
-		for {
-			canalEventos <- termbox.PollEvent()
-		}
-	}()
-	p.Cabezero()
-	p.cuerpo()
-	fmt.Println("\n\n", p.instrucciones)
-	p.responder()
-	for {
-		select {
-		case ev := <-canalEventos:
-			if ev.Type == termbox.EventKey {
-				switch {
-				case ev.Ch == 68 || ev.Key == termbox.KeyArrowLeft:
-					anterior := p.ObtenerAnterior()
-					if anterior != nil {
-						termbox.Interrupt()
-						termbox.Close()
-						mostrarPantalla(anterior)
-					}
-				case ev.Ch == 67 || ev.Key == termbox.KeyArrowRight:
-					siguiente := p.ObtenerSiguiente()
-					if siguiente != nil {
-						termbox.Interrupt()
-						termbox.Close()
-						mostrarPantalla(siguiente)
-					}
-				case ev.Ch == 65 || ev.Key == termbox.KeyArrowUp:
-					if p.respuestaSeleccionada-1 != -1 {
-						p.respuestaSeleccionada--
-					}
-				case ev.Ch == 66 || ev.Key == termbox.KeyArrowDown:
-					if p.respuestaSeleccionada+1 != len(p.Respuestas) {
-						p.respuestaSeleccionada++
-					}
-				case ev.Key == termbox.KeyEnter:
-					p.respuestaElegida = p.respuestaSeleccionada
-					p.responder()
-				}
-
-				if runtime.GOOS == "windows" {
-					termbox.Interrupt()
-					termbox.Close()
-				}
-				p.renderizarPregunta()
-			}
+func (p *TutorialPregunta) TclDerecha(c *Controlador) {
+	siguiente := p.ObtenerSiguiente()
+	if siguiente != nil {
+		if siguiente.NecesitaControlador() {
+			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
+			c.IntercambiarPant(siguiente)
+		} else {
+			c.Parar()
+			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
 		}
 	}
+}
+func (p *TutorialPregunta) TclIzquierda(c *Controlador) {
+	anterior := p.ObtenerAnterior()
+	if anterior != nil {
+		mostrarPantalla(anterior) // Navega a la pantalla anterior.
+		c.IntercambiarPant(anterior)
+	}
+}
+func (p *TutorialPregunta) TclAbajo() {
+	if p.respuestaSeleccionada+1 != len(p.Respuestas) {
+		p.respuestaSeleccionada++ // Mueve la selección de respuesta hacia abajo.
+		mostrarPantalla(p)
+	}
+}
+func (p *TutorialPregunta) TclArriba() {
+	if p.respuestaSeleccionada-1 != -1 {
+		p.respuestaSeleccionada-- // Mueve la selección de respuesta hacia arriba.
+		mostrarPantalla(p)
+	}
+}
+func (p *TutorialPregunta) TclEnter() {
+	p.respuestaElegida = p.respuestaSeleccionada // Registra la respuesta elegida por el estudiante.
+	p.responder()                                // Llama al método responder para evaluar la respuesta.
+	mostrarPantalla(p)
 }
 
 // Definición de la estructura TutorialCalificacion que extiende la estructura PantallaCalif.
@@ -120,4 +94,5 @@ func (p *TutorialCalificacion) Cabezero() {
 	fmt.Println(`Bien! has resuelto el examen de prueba que NO TIENE VALOR,
 presiona ENTER para comenzar con el VERADERO EXAMEN`)
 	fmt.Scanln() // Espera a que el usuario presione Enter para continuar con el examen real.
+	mostrarPantalla(p.ObtenerSiguiente())
 }

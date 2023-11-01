@@ -30,7 +30,7 @@ preguntas, tutoriales y pantallas de calificación
 
 Función NuevoExamen crea y configura un nuevo examen a partir de un archivo JSON.
 */
-func NuevoExamen(ruta string) Examen {
+func NuevoExamen(ruta string) (Examen, Controlador) {
 	_, err := os.Stat(ruta)
 	if os.IsNotExist(err) {
 		fmt.Println("El archivo", ruta, "no existe :/")
@@ -60,6 +60,7 @@ func NuevoExamen(ruta string) Examen {
 	preguntasTotales := len(nuevoExamen.Preguntas) // Obtiene la cantidad de preguntas en el examen.
 	if preguntasTotales == 0 {
 		fmt.Println("El archivo", ruta, "no tiene ninguna pregunta :/")
+		time.Sleep(time.Second)
 		os.Exit(1)
 	}
 
@@ -183,6 +184,10 @@ func NuevoExamen(ruta string) Examen {
 		instrucciones: TEXTO_TUTORIAL,
 		msgFinal:      "LAS SIGUIENTES PREGUNTAS SOLO SERÁN DE PRUEBA",
 	}
+	nuevoControlador := Controlador{
+		pantallaSubscriptora: &instrucciones,
+		cancelar:             make(chan struct{}),
+	}
 
 	// Configura la primera pantalla de inicio del examen.
 	nuevoExamen.primeraPantalla = &PantallaIncio{
@@ -193,7 +198,7 @@ func NuevoExamen(ruta string) Examen {
 		Estudiante: &nuevoEstudiante,
 	}
 
-	return nuevoExamen
+	return nuevoExamen, nuevoControlador
 }
 
 /*

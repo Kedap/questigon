@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 /*
 Este fragmento de código se centra en mostrar las instrucciones y el mensaje
@@ -18,4 +20,12 @@ type PantallaTutorial struct {
 func (p *PantallaTutorial) cuerpo() {
 	fmt.Println(p.instrucciones)
 	fmt.Println(p.msgFinal)
+}
+func (p *PantallaTutorial) TclDerecha(c *Controlador) {
+	siguiente := p.ObtenerSiguiente()
+	if siguiente != nil {
+		mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
+		c.IntercambiarPant(siguiente)
+		// TODO: Poner intercambiar el observador
+	}
 }

@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"runtime"
 
 	"github.com/fatih/color"
-	"github.com/nsf/termbox-go"
 )
 
 /*
@@ -76,70 +73,89 @@ func (p *PPregunta) cuerpo() {
 		}
 	}
 }
+func (p *PPregunta) TclDerecha(c *Controlador) {
+	siguiente := p.ObtenerSiguiente()
+	if siguiente != nil {
+		// termbox.Interrupt()
+		// termbox.Close()
+		mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
+		// TODO: Poner intercambiar el observador
+	}
+	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
+}
+func (p *PPregunta) TclIzquierda(c *Controlador) {
+	anterior := p.ObtenerAnterior()
+	if anterior != nil {
+		// termbox.Interrupt()
+		// termbox.Close()
+		mostrarPantalla(anterior) // Navega a la pantalla anterior.
+		// TODO: Poner intercambiar el observador
+	}
+	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
+}
+func (p *PPregunta) TclAbajo() {
+	if p.respuestaSeleccionada+1 != len(p.Respuestas) {
+		p.respuestaSeleccionada++ // Mueve la selección de respuesta hacia abajo.
+	}
+	// TODO: Poner intercambiar el observador
+	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
+}
+func (p *PPregunta) TclArriba() {
+	if p.respuestaSeleccionada-1 != -1 {
+		p.respuestaSeleccionada-- // Mueve la selección de respuesta hacia arriba.
+	}
+	// TODO: Poner intercambiar el observador
+	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
+}
+func (p *PPregunta) TclEnter() {
+	p.respuestaElegida = p.respuestaSeleccionada // Registra la respuesta elegida por el estudiante.
+	p.responder()                                // Llama al método responder para evaluar la respuesta.
+	// TODO: Poner intercambiar el observador
+	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
+}
 
 // Implementación del método renderizarPregunta para PPregunta.
-func (p *PPregunta) renderizarPregunta() {
-	err := termbox.Init() // Inicializa la biblioteca Termbox para manejar eventos.
-	if err != nil {
-		fmt.Println("Oh no, ocurrió un error al inicializar los controladores:", err)
-		os.Exit(1)
-	}
-	defer termbox.Close()
-
-	canalEventos := make(chan termbox.Event) // Crea un canal de eventos para manejar eventos de Termbox en una goroutine.
-	go func() {
-		for {
-			canalEventos <- termbox.PollEvent()
-		}
-	}()
-
-	p.Cabezero()                         // Muestra el encabezado de la pregunta.
-	p.cuerpo()                           // Muestra el cuerpo de la pregunta.
-	fmt.Println("\n\n", p.instrucciones) // Muestra las instrucciones de la pregunta.
-
-	p.responder() // Llama al método responder para evaluar la respuesta del estudiante.
-
-	for {
-		select {
-		case ev := <-canalEventos:
-			if ev.Type == termbox.EventKey {
-				switch {
-				case ev.Ch == 68 || ev.Key == termbox.KeyArrowLeft:
-					anterior := p.ObtenerAnterior()
-					if anterior != nil {
-						termbox.Interrupt()
-						termbox.Close()
-						mostrarPantalla(anterior) // Navega a la pantalla anterior.
-					}
-				case ev.Ch == 67 || ev.Key == termbox.KeyArrowRight:
-					siguiente := p.ObtenerSiguiente()
-					if siguiente != nil {
-						termbox.Interrupt()
-						termbox.Close()
-						mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
-					}
-
-				case ev.Ch == 65 || ev.Key == termbox.KeyArrowUp:
-					if p.respuestaSeleccionada-1 != -1 {
-						p.respuestaSeleccionada-- // Mueve la selección de respuesta hacia arriba.
-					}
-
-				case ev.Ch == 66 || ev.Key == termbox.KeyArrowDown:
-					if p.respuestaSeleccionada+1 != len(p.Respuestas) {
-						p.respuestaSeleccionada++ // Mueve la selección de respuesta hacia abajo.
-					}
-
-				case ev.Key == termbox.KeyEnter:
-					p.respuestaElegida = p.respuestaSeleccionada // Registra la respuesta elegida por el estudiante.
-					p.responder()                                // Llama al método responder para evaluar la respuesta.
-				}
-
-				if runtime.GOOS == "windows" {
-					termbox.Interrupt()
-					termbox.Close()
-				}
-				p.renderizarPregunta() // Renderiza nuevamente la pregunta.
-			}
-		}
-	}
-}
+// func (p *PPregunta) renderizarPregunta() {
+// 	err := termbox.Init() // Inicializa la biblioteca Termbox para manejar eventos.
+// 	if err != nil {
+// 		fmt.Println("Oh no, ocurrió un error al inicializar los controladores:", err)
+// 		os.Exit(1)
+// 	}
+// 	defer termbox.Close()
+//
+// 	canalEventos := make(chan termbox.Event) // Crea un canal de eventos para manejar eventos de Termbox en una goroutine.
+// 	go func() {
+// 		for {
+// 			canalEventos <- termbox.PollEvent()
+// 		}
+// 	}()
+//
+// 	p.Cabezero()                         // Muestra el encabezado de la pregunta.
+// 	p.cuerpo()                           // Muestra el cuerpo de la pregunta.
+// 	fmt.Println("\n\n", p.instrucciones) // Muestra las instrucciones de la pregunta.
+//
+// 	p.responder() // Llama al método responder para evaluar la respuesta del estudiante.
+//
+// 	for {
+// 		select {
+// 		case ev := <-canalEventos:
+// 			if ev.Type == termbox.EventKey {
+// 				switch {
+// 				case ev.Ch == 68 || ev.Key == termbox.KeyArrowLeft:
+// 				case ev.Ch == 67 || ev.Key == termbox.KeyArrowRight:
+//
+// 				case ev.Ch == 65 || ev.Key == termbox.KeyArrowUp:
+//
+// 				case ev.Ch == 66 || ev.Key == termbox.KeyArrowDown:
+//
+// 				case ev.Key == termbox.KeyEnter:
+// 				}
+//
+// 				if runtime.GOOS == "windows" {
+// 					termbox.Interrupt()
+// 					termbox.Close()
+// 				}
+// 			}
+// 		}
+// 	}
+// }

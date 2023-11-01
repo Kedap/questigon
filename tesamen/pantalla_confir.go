@@ -44,3 +44,7 @@ func (p *PantallaConfirmacion) cuerpo() {
 		mostrarPantalla(p.ObtenerAnterior()) // Muestra la pantalla anterior.
 	}
 }
+
+func (p *PantallaConfirmacion) NecesitaControlador() bool {
+	return false
+}
