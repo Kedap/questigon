@@ -8,7 +8,6 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-// TODO: agregarlo en el script de compilación
 type Controlador struct {
 	pantallaSubscriptora Pantalla
 	cancelar             chan struct{}
