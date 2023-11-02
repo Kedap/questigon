@@ -46,7 +46,7 @@ func (p *PantallaConfirmacion) cuerpo() {
 			pantallaSubscriptora: anterior,
 			cancelar:             make(chan struct{}),
 		}
-		controlador.Ejecutar()
+		controlador.Lanzar()
 		mostrarPantalla(anterior) // Muestra la pantalla anterior.
 		controlador.Escuchar()
 	}

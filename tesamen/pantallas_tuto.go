@@ -101,7 +101,7 @@ presiona ENTER para comenzar con el VERADERO EXAMEN`)
 		pantallaSubscriptora: siguiente,
 		cancelar:             make(chan struct{}),
 	}
-	controles.Ejecutar()
+	controles.Lanzar()
 	mostrarPantalla(siguiente)
 	controles.Escuchar()
 }

@@ -24,7 +24,7 @@ func main() {
 	examenMates, controlador := NuevoExamen(ruta)
 	// Muestra la primera pantalla del examen para comenzar.
 	mostrarPantalla(examenMates.primeraPantalla)
-	controlador.Ejecutar()
+	controlador.Lanzar()
 	mostrarPantalla(examenMates.primeraPantalla.ObtenerSiguiente())
 	controlador.Escuchar()
 }

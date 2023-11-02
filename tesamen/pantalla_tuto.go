@@ -26,6 +26,5 @@ func (p *PantallaTutorial) TclDerecha(c *Controlador) {
 	if siguiente != nil {
 		mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
 		c.IntercambiarPant(siguiente)
-		// TODO: Poner intercambiar el observador
 	}
 }
