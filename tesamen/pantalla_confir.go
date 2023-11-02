@@ -41,7 +41,14 @@ func (p *PantallaConfirmacion) cuerpo() {
 	if lector.Text() == "ESTOY DE ACUERDO" {
 		mostrarPantalla(p.ObtenerSiguiente()) // Muestra la siguiente pantalla.
 	} else {
-		mostrarPantalla(p.ObtenerAnterior()) // Muestra la pantalla anterior.
+		anterior := p.ObtenerAnterior()
+		controlador := Controlador{
+			pantallaSubscriptora: anterior,
+			cancelar:             make(chan struct{}),
+		}
+		controlador.Ejecutar()
+		mostrarPantalla(anterior) // Muestra la pantalla anterior.
+		controlador.Escuchar()
 	}
 }
 

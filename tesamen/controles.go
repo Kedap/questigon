@@ -23,7 +23,7 @@ func (c *Controlador) IntercambiarPant(p Pantalla) {
 }
 
 // TODO: Cambiar el nombre del metodo
-func (c *Controlador) ejecutar() {
+func (c *Controlador) Ejecutar() {
 	err := termbox.Init() // Inicializa la biblioteca Termbox para manejar eventos.
 	if err != nil {
 		fmt.Println("Oh no, ocurrió un error al inicializar los controladores:", err)

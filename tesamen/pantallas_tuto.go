@@ -30,6 +30,8 @@ func (p *TutorialPregunta) TclDerecha(c *Controlador) {
 			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
 			c.IntercambiarPant(siguiente)
 		} else {
+			// BUG: Se queda atascado el ultimo movimiento?
+			c.EliminarPant()
 			c.Parar()
 			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
 		}
