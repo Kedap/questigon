@@ -6,9 +6,7 @@ módulo principal en Python.
 package main
 
 // En esta sección, se importan varias bibliotecas que se utilizarán
-import (
-	"os"
-)
+import "os"
 
 // main es la función principal del programa.
 func main() {

@@ -11,7 +11,6 @@ import (
 type Controlador struct {
 	pantallaSubscriptora Pantalla
 	cancelar             chan struct{}
-	// canalEventos         chan termbox.Event
 }
 
 func (c *Controlador) EliminarPant() {
@@ -29,14 +28,6 @@ func (c *Controlador) Lanzar() {
 		time.Sleep(time.Second)
 		os.Exit(1)
 	}
-
-	// TODO: Ver que pedo con estos metodos
-
-	// p.Cabezero()                         // Muestra el encabezado de la pregunta.
-	// p.cuerpo()                           // Muestra el cuerpo de la pregunta.
-	// fmt.Println("\n\n", p.instrucciones) // Muestra las instrucciones de la pregunta.
-	// p.responder() // Llama al método responder para evaluar la respuesta del estudiante.
-
 }
 
 func (c *Controlador) Escuchar() {
