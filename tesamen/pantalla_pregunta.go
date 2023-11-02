@@ -76,43 +76,43 @@ func (p *PPregunta) cuerpo() {
 func (p *PPregunta) TclDerecha(c *Controlador) {
 	siguiente := p.ObtenerSiguiente()
 	if siguiente != nil {
-		// termbox.Interrupt()
-		// termbox.Close()
-		mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
-		// TODO: Poner intercambiar el observador
+		if siguiente.NecesitaControlador() {
+			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
+			c.IntercambiarPant(siguiente)
+		} else {
+			// BUG: Se queda atascado el ultimo movimiento?
+			c.EliminarPant()
+			c.Parar()
+			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
+		}
 	}
-	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
 }
 func (p *PPregunta) TclIzquierda(c *Controlador) {
 	anterior := p.ObtenerAnterior()
 	if anterior != nil {
-		// termbox.Interrupt()
-		// termbox.Close()
 		mostrarPantalla(anterior) // Navega a la pantalla anterior.
-		// TODO: Poner intercambiar el observador
+		c.IntercambiarPant(anterior)
 	}
-	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
 }
 func (p *PPregunta) TclAbajo() {
 	if p.respuestaSeleccionada+1 != len(p.Respuestas) {
 		p.respuestaSeleccionada++ // Mueve la selección de respuesta hacia abajo.
+		mostrarPantalla(p)
 	}
-	// TODO: Poner intercambiar el observador
-	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
 }
 func (p *PPregunta) TclArriba() {
 	if p.respuestaSeleccionada-1 != -1 {
 		p.respuestaSeleccionada-- // Mueve la selección de respuesta hacia arriba.
+		mostrarPantalla(p)
 	}
-	// TODO: Poner intercambiar el observador
-	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
 }
 func (p *PPregunta) TclEnter() {
 	p.respuestaElegida = p.respuestaSeleccionada // Registra la respuesta elegida por el estudiante.
 	p.responder()                                // Llama al método responder para evaluar la respuesta.
-	// TODO: Poner intercambiar el observador
-	mostrarPantalla(p) // Renderiza nuevamente la pregunta.
+	mostrarPantalla(p)
 }
+
+//TODO: Eliminar estos comentarios
 
 // Implementación del método renderizarPregunta para PPregunta.
 // func (p *PPregunta) renderizarPregunta() {

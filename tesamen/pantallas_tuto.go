@@ -96,5 +96,12 @@ func (p *TutorialCalificacion) Cabezero() {
 	fmt.Println(`Bien! has resuelto el examen de prueba que NO TIENE VALOR,
 presiona ENTER para comenzar con el VERADERO EXAMEN`)
 	fmt.Scanln() // Espera a que el usuario presione Enter para continuar con el examen real.
-	mostrarPantalla(p.ObtenerSiguiente())
+	siguiente := p.ObtenerSiguiente()
+	controles := Controlador{
+		pantallaSubscriptora: siguiente,
+		cancelar:             make(chan struct{}),
+	}
+	controles.Ejecutar()
+	mostrarPantalla(siguiente)
+	controles.Escuchar()
 }
