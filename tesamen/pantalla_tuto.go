@@ -21,10 +21,15 @@ func (p *PantallaTutorial) cuerpo() {
 	fmt.Println(p.instrucciones)
 	fmt.Println(p.msgFinal)
 }
-func (p *PantallaTutorial) TclDerecha(c *Controlador) {
+func (p *PantallaTutorial) TclDerecha(c *Controlador) Pantalla {
 	siguiente := p.ObtenerSiguiente()
 	if siguiente != nil {
-		mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
-		c.IntercambiarPant(siguiente)
+		if siguiente.NecesitaControlador() {
+			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
+			c.IntercambiarPant(siguiente)
+		} else {
+			return siguiente
+		}
 	}
+	return nil
 }

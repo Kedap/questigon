@@ -73,19 +73,17 @@ func (p *PPregunta) cuerpo() {
 		}
 	}
 }
-func (p *PPregunta) TclDerecha(c *Controlador) {
+func (p *PPregunta) TclDerecha(c *Controlador) Pantalla {
 	siguiente := p.ObtenerSiguiente()
 	if siguiente != nil {
 		if siguiente.NecesitaControlador() {
 			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
 			c.IntercambiarPant(siguiente)
 		} else {
-			// BUG: Se queda atascado el ultimo movimiento?
-			c.EliminarPant()
-			c.Parar()
-			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
+			return siguiente
 		}
 	}
+	return nil
 }
 func (p *PPregunta) TclIzquierda(c *Controlador) {
 	anterior := p.ObtenerAnterior()

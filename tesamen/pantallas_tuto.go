@@ -23,19 +23,17 @@ func (p *TutorialPregunta) responder() {
 		p.respondioBien = !p.respondioBien // Cambia el estado de "respondioBien" para evitar múltiples decrementos.
 	}
 }
-func (p *TutorialPregunta) TclDerecha(c *Controlador) {
+func (p *TutorialPregunta) TclDerecha(c *Controlador) Pantalla {
 	siguiente := p.ObtenerSiguiente()
 	if siguiente != nil {
 		if siguiente.NecesitaControlador() {
 			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
 			c.IntercambiarPant(siguiente)
 		} else {
-			// BUG: Se queda atascado el ultimo movimiento?
-			c.EliminarPant()
-			c.Parar()
-			mostrarPantalla(siguiente) // Navega a la pantalla siguiente.
+			return siguiente
 		}
 	}
+	return nil
 }
 func (p *TutorialPregunta) TclIzquierda(c *Controlador) {
 	anterior := p.ObtenerAnterior()
