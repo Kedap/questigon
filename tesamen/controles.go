@@ -35,11 +35,11 @@ func (c *Controlador) ejecutar() {
 	go func() {
 		for {
 			select {
-			case c.canalEventos <- termbox.PollEvent():
 			case <-c.cancelar:
-				close(c.canalEventos)
 				termbox.Close()
+				close(c.canalEventos)
 				return
+			case c.canalEventos <- termbox.PollEvent():
 			}
 		}
 	}()
@@ -53,33 +53,24 @@ func (c *Controlador) ejecutar() {
 
 }
 func (c *Controlador) Escuchar() {
-	for {
-		select {
-		case ev := <-c.canalEventos:
-			if ev.Type == termbox.EventKey {
-				switch {
-				case ev.Ch == 68 || ev.Key == termbox.KeyArrowLeft:
-					c.pantallaSubscriptora.TclIzquierda(c)
-				case ev.Ch == 67 || ev.Key == termbox.KeyArrowRight:
-					c.pantallaSubscriptora.TclDerecha(c)
-				case ev.Ch == 65 || ev.Key == termbox.KeyArrowUp:
-					c.pantallaSubscriptora.TclArriba()
-				case ev.Ch == 66 || ev.Key == termbox.KeyArrowDown:
-					c.pantallaSubscriptora.TclAbajo()
-				case ev.Key == termbox.KeyEnter:
-					c.pantallaSubscriptora.TclEnter()
-				}
+	for ev := range c.canalEventos {
+		if ev.Type == termbox.EventKey {
+			switch {
+			case ev.Ch == 68 || ev.Key == termbox.KeyArrowLeft:
+				c.pantallaSubscriptora.TclIzquierda(c)
+			case ev.Ch == 67 || ev.Key == termbox.KeyArrowRight:
+				c.pantallaSubscriptora.TclDerecha(c)
+			case ev.Ch == 65 || ev.Key == termbox.KeyArrowUp:
+				c.pantallaSubscriptora.TclArriba()
+			case ev.Ch == 66 || ev.Key == termbox.KeyArrowDown:
+				c.pantallaSubscriptora.TclAbajo()
+			case ev.Key == termbox.KeyEnter:
+				c.pantallaSubscriptora.TclEnter()
 			}
 		}
 	}
-
 }
 func (c *Controlador) Parar() {
-	// close(c.canalEventos)
 	c.cancelar <- struct{}{}
-	// c.canalEventos <- termbox.Event{
-	// 	Type: termbox.EventKey,
-	// 	Ch:   68,
-	// }
-	// c.canalEventos = nil
+	defer time.Sleep(500 * time.Microsecond)
 }
