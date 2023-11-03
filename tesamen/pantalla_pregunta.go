@@ -72,6 +72,7 @@ func (p *PPregunta) cuerpo() {
 			fmt.Println(respuesta) // Muestra las demás respuestas.
 		}
 	}
+	p.responder()
 	fmt.Println("\n\n", p.instrucciones) // Muestra las instrucciones de la pregunta.
 }
 func (p *PPregunta) TclDerecha(c *Controlador) Pantalla {
