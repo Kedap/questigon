@@ -186,7 +186,6 @@ func NuevoExamen(ruta string) (Examen, Controlador) {
 	}
 	nuevoControlador := Controlador{
 		pantallaSubscriptora: &instrucciones,
-		cancelar:             make(chan struct{}),
 	}
 
 	// Configura la primera pantalla de inicio del examen.

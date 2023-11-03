@@ -47,6 +47,7 @@ func (p *PantallaIncio) cuerpo() {
 		estiloError.Println("Vuelve a intentarlo")
 		time.Sleep(3 * time.Second)
 		mostrarPantalla(p)
+		return
 	}
 	p.Estudiante.Grupo = nGrupo
 	fmt.Printf("\nEres %s del grupo %d\n", p.Estudiante.Nombre, p.Estudiante.Grupo) // Muestra la información ingresada.

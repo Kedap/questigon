@@ -97,7 +97,6 @@ presiona ENTER para comenzar con el VERADERO EXAMEN`)
 	siguiente := p.ObtenerSiguiente()
 	controles := Controlador{
 		pantallaSubscriptora: siguiente,
-		cancelar:             make(chan struct{}),
 	}
 	controles.Lanzar()
 	mostrarPantalla(siguiente)

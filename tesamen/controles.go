@@ -10,7 +10,6 @@ import (
 
 type Controlador struct {
 	pantallaSubscriptora Pantalla
-	cancelar             chan struct{}
 }
 
 func (c *Controlador) EliminarPant() {

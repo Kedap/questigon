@@ -44,7 +44,6 @@ func (p *PantallaConfirmacion) cuerpo() {
 		anterior := p.ObtenerAnterior()
 		controlador := Controlador{
 			pantallaSubscriptora: anterior,
-			cancelar:             make(chan struct{}),
 		}
 		controlador.Lanzar()
 		mostrarPantalla(anterior) // Muestra la pantalla anterior.
