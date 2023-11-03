@@ -42,7 +42,6 @@ func (c *Controlador) Escuchar() {
 				if pantalla != nil {
 					termbox.Close()
 					defer mostrarPantalla(pantalla)
-					time.Sleep(500 * time.Millisecond)
 					return
 				}
 			case evento.Ch == 65 || evento.Key == termbox.KeyArrowUp:
