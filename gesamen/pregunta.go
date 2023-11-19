@@ -5,8 +5,15 @@ type Pregunta struct {
 	Respuestas        []string
 	RespuestaCorrecta int
 	resuelta          bool
+	estudiante        *Estudiante
 }
 
 func (p *Pregunta) Responder(respuesta string) {
-	p.resuelta = respuesta == p.Respuestas[p.RespuestaCorrecta-1]
+	if respuesta == p.Respuestas[p.RespuestaCorrecta-1] && !p.resuelta {
+		p.estudiante.RespuestasCorrectas++
+		p.resuelta = true
+	} else if respuesta != p.Respuestas[p.RespuestaCorrecta-1] && p.resuelta {
+		p.estudiante.RespuestasCorrectas--
+		p.resuelta = false
+	}
 }
