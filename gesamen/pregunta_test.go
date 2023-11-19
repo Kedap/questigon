@@ -9,7 +9,8 @@ func TestPreguntaResponder(t *testing.T) {
 		RespuestaCorrecta: 3,
 	}
 
-	pregunta.Responder(3)
+	const RESPUESTA_CORRECTA = "16/9"
+	pregunta.Responder(RESPUESTA_CORRECTA)
 
 	if !pregunta.resuelta {
 		t.Error("FATAL: El metodo responder no funciona correctamente")

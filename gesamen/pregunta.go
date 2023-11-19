@@ -7,6 +7,6 @@ type Pregunta struct {
 	resuelta          bool
 }
 
-func (p *Pregunta) Responder(respuesta int) {
-	p.resuelta = respuesta == p.RespuestaCorrecta
+func (p *Pregunta) Responder(respuesta string) {
+	p.resuelta = respuesta == p.Respuestas[p.RespuestaCorrecta-1]
 }
