@@ -49,5 +49,25 @@ func TestPreguntaResponderEstudiante(t *testing.T) {
 	} else if pregunta.resuelta {
 		t.Error("FALLO: Responder la pregunta no hace cambios en la pregunta, incluso cuando se respondio mal")
 	}
+}
 
+func TestPreguntaResponderEstudianteNoResuelta(t *testing.T) {
+	estudiante := Estudiante{
+		Nombre:              "Test",
+		RespuestasCorrectas: 0,
+	}
+	pregunta := Pregunta{
+		Pregunta:          "¿Cual es el dia de la independencia?",
+		Respuestas:        []string{"11/11", "25/12", "16/9"},
+		RespuestaCorrecta: 3,
+		estudiante:        &estudiante,
+	}
+
+	const RESPUESTA_INCORRECTA = "11/11"
+	pregunta.Responder(RESPUESTA_INCORRECTA)
+	if estudiante.RespuestasCorrectas != 0 {
+		t.Error("FALLO: Volver a responder mal la pregunta deberia decrementar una respuesta correcta")
+	} else if pregunta.resuelta {
+		t.Error("FALLO: Responder la pregunta no hace cambios en la pregunta, incluso cuando se respondio mal")
+	}
 }
