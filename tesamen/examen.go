@@ -39,7 +39,7 @@ func NuevoExamen(ruta string) (Examen, Controlador) {
 
 	nuevoEstudiante := Estudiante{} // Crea una instancia de Estudiante.
 
-	jsonFile, err := os.Open("examen.json") // Abre el archivo JSON del examen.
+	jsonFile, err := os.Open(ruta) // Abre el archivo JSON del examen.
 	if err != nil {
 		fmt.Println("Ocurrió un error al leer el examen:c")
 		os.Exit(1)
