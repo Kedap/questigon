@@ -27,7 +27,6 @@ type Pantalla interface {
 
 // Implementación de los métodos de la interfaz Pantalla para PantallaSimple.
 func (p *PantallaSimple) cuerpo()                            {}
-func (p *PantallaSimple) renderizarPregunta()                {}
 func (p *PantallaSimple) ObtenerSiguiente() Pantalla         { return p.PSiguiente }
 func (p *PantallaSimple) ObtenerAnterior() Pantalla          { return p.PAnterior }
 func (p *PantallaSimple) TclDerecha(c *Controlador) Pantalla { return nil }
