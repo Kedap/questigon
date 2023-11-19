@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 /*
 Este fragmento de código se centra en mostrar las instrucciones y el mensaje
