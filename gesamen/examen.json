@@ -1,0 +1,120 @@
+{
+  "Nombre": "Examen de la 3ra unidad de matematicas discretas",
+  "Preguntas": [
+    {
+      "Pregunta": "¿Cuál de las siguientes es una proposición simple?",
+      "Respuestas": [
+        "Juan estudia matemáticas",
+        "Si María estudia, entonces Juan también estudia",
+        "O María estudia o Juan estudia",
+        "Todas las anteriores"
+      ],
+      "RespuestaCorrecta": 1
+    },
+    {
+      "Pregunta": "¿Cuál es la negación de la proposición \"Hace sol\"?",
+      "Respuestas": ["Hace frío", "No hace sol", "Hace viento", "Hace calor"],
+      "RespuestaCorrecta": 2
+    },
+    {
+      "Pregunta": "En programación ¿Que simbolos representan la conjunción?",
+      "Respuestas": ["||", "if", "\u0026\u0026", "!="],
+      "RespuestaCorrecta": 3
+    },
+    {
+      "Pregunta": "¿Cuál de las siguientes proposiciones siempre da verdadero (tautología)?",
+      "Respuestas": ["P o ¬P", "P y Q", "P ↔ Q", "P o Q"],
+      "RespuestaCorrecta": 1
+    },
+    {
+      "Pregunta": "Una proposición compuesta que siempre es falsa se llama:",
+      "Respuestas": [
+        "Tautología",
+        "Contradicción",
+        "Condicional",
+        "Disyunción"
+      ],
+      "RespuestaCorrecta": 2
+    },
+    {
+      "Pregunta": "¿Cuál de las siguientes proposiciones es contingente?",
+      "Respuestas": [
+        "2 + 2 = 5",
+        "3 + 3 = 6",
+        "1 + 1 = 2",
+        "Todas las anteriores"
+      ],
+      "RespuestaCorrecta": 4
+    },
+    {
+      "Pregunta": "¿Cuál de las siguientes proposiciones es equivalente a ¬(P y Q)?",
+      "Respuestas": ["P o Q", "P y Q", "¬P o ¬Q", "P ↔ Q"],
+      "RespuestaCorrecta": 3
+    },
+    {
+      "Pregunta": "¿Cuál de las siguientes reglas de inferencia se usa para demostrar una proposición condicional (por lo tanto)?",
+      "Respuestas": [
+        "Modus Ponens",
+        "Silogismo condicional",
+        "Silogismo disyuntivo",
+        "Modus Tollens"
+      ],
+      "RespuestaCorrecta": 1
+    },
+    {
+      "Pregunta": "Si se sabe que \"Si llueve, entonces Juan lleva un paraguas\" es verdadero, y también se sabe que \"Juan lleva un paraguas\" es verdadero, ¿qué conclusión se puede obtener?",
+      "Respuestas": [
+        "Está lluviendo",
+        "Esta haciendo calor",
+        "Juan se quita el sombrero",
+        "El paraguas es rojo"
+      ],
+      "RespuestaCorrecta": 1
+    },
+    {
+      "Pregunta": "¿Cuál de las siguientes proposiciones es un argumento válido?",
+      "Respuestas": [
+        "Si Juan estudia, entonces aprobará el examen. Juan aprobó el examen, por lo tanto, Juan estudió.",
+        "Si Juan estudia, entonces aprobará el examen. Juan no aprobó el examen, por lo tanto, Juan no estudió.",
+        "Si Juan estudia, entonces aprobará el examen. Juan aprobó el examen, por lo tanto, Juan no estudió.",
+        "Todas las anteriores"
+      ],
+      "RespuestaCorrecta": 4
+    },
+    {
+      "Pregunta": "¿Cuál de las siguientes proposiciones es una contradicción?",
+      "Respuestas": ["2 + 2 = 5", "3 + 3 = 6", "1 + 1 = 2", "3 * 3 = 9"],
+      "RespuestaCorrecta": 1
+    },
+    {
+      "Pregunta": "¿Cuál de las siguientes proposiciones es una tautología?",
+      "Respuestas": ["P o Q", "P y Q", "P ↔ Q", "P o ¬Q"],
+      "RespuestaCorrecta": 3
+    },
+    {
+      "Pregunta": "¿Cuál es el valor de verdad de la proposición compuesta P o (¬P y Q) cuando P es verdadero y Q es falso?",
+      "Respuestas": ["Verdadero", "Falso", "Condicional", "Contingente"],
+      "RespuestaCorrecta": 1
+    },
+    {
+      "Pregunta": "¿Cuál es la regla de inferencia que afirma que si conocemos que \"Si P, entonces Q\" es verdadero y que P es verdadero, entonces podemos concluir que Q es verdadero?",
+      "Respuestas": [
+        "Modus Ponens",
+        "Modus Tollens",
+        "Silogismo disyuntivo",
+        "Silogismo hipotético"
+      ],
+      "RespuestaCorrecta": 1
+    },
+    {
+      "Pregunta": "¿Cual de las siguientes enunciados representan el disyunción? (||)",
+      "Respuestas": [
+        "Todo tiene que ser verdad para que sea verdad, de lo contrario sera falso",
+        "Con tan solo una verdad, el resultado sera verdad",
+        "Siempre es el contrario de la variable",
+        "Uno o el otro, pero no ambos"
+      ],
+      "RespuestaCorrecta": 2
+    }
+  ]
+}
