@@ -9,10 +9,14 @@ func TestPreguntaResponder(t *testing.T) {
 		RespuestaCorrecta: 3,
 	}
 
+	if pregunta.resuelta {
+		t.Error("FALLO: La pregunta no puede estar resuelta por defecto")
+	}
+
 	const RESPUESTA_CORRECTA = "16/9"
 	pregunta.Responder(RESPUESTA_CORRECTA)
 
 	if !pregunta.resuelta {
-		t.Error("FATAL: El metodo responder no funciona correctamente")
+		t.Error("FALLO: El metodo responder no funciona correctamente")
 	}
 }
