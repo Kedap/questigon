@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
@@ -28,17 +30,7 @@ func (p *Pregunta) Responder(respuesta string) {
 // opciones y una función que la resuelve `p.Responder(respuestaElegida)`
 func (p *Pregunta) aContenedor() *fyne.Container {
 	contenedorPregunta := container.NewVBox(widget.NewLabel(p.Pregunta))
-	opciones := widget.NewRadioGroup(p.Respuestas, func(r string) { p.Responder(r) })
+	opciones := widget.NewRadioGroup(p.Respuestas, func(r string) { p.Responder(r); log.Println(p.Pregunta) })
 	contenedorPregunta.Add(opciones)
 	return contenedorPregunta
 }
-
-//
-// func agregarPregAVent(preguntas []Pregunta, w fyne.Window) {
-// 	cuestionario := container.NewVBox()
-// 	for _, pregunta := range preguntas {
-// 		contenedorPregunta := pregunta.aContenedor()
-// 		cuestionario.Add(contenedorPregunta)
-// 	}
-// 	w.SetContent(container.NewVScroll(cuestionario))
-// }
