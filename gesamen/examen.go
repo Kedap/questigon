@@ -13,7 +13,7 @@ type Examen struct {
 	Preguntas []Pregunta
 }
 
-func NuevoExamen(ruta string) (*Examen, error) {
+func NuevoExamen(ruta string, e *Estudiante) (*Examen, error) {
 	_, err := os.Stat(ruta)
 	if os.IsNotExist(err) {
 		return nil, fmt.Errorf("El archivo %s no existe!", ruta)
@@ -34,7 +34,20 @@ func NuevoExamen(ruta string) (*Examen, error) {
 	if len(nuevoExamen.Preguntas) == 0 {
 		return nil, fmt.Errorf("El examen contiene 0 preguntas")
 	} else if nuevoExamen.Nombre == "" {
-		return nil, errors.New("FALLO: El examen no puede no tener nombre!")
+		return nil, errors.New("El examen no puede no tener nombre!")
+	} else if e == nil {
+		return nil, errors.New("El estudiante esta vacio!")
+	}
+
+	for i, pregunta := range nuevoExamen.Preguntas {
+		nuevaPregunta := Pregunta{
+			Pregunta:          pregunta.Pregunta,
+			Respuestas:        pregunta.Respuestas,
+			RespuestaCorrecta: pregunta.RespuestaCorrecta,
+			resuelta:          pregunta.resuelta,
+			estudiante:        e,
+		}
+		nuevoExamen.Preguntas[i] = nuevaPregunta
 	}
 
 	return &nuevoExamen, nil

@@ -3,7 +3,10 @@ package main
 import "testing"
 
 func TestNuevoExamen(t *testing.T) {
-	examen, err := NuevoExamen("examen.json")
+	estudiante := Estudiante{
+		Nombre: "Test",
+	}
+	examen, err := NuevoExamen("examen.json", &estudiante)
 
 	if err != nil {
 		t.Errorf("FALLO: %s", err)
@@ -26,5 +29,11 @@ func TestNuevoExamen(t *testing.T) {
 	} else if primera_preguanta.Respuestas[2] != TERCERA_RESPUESTA_PRIMERA_PREGUNTA {
 		t.Errorf("FALLO: Como tercera respuesta de la primera pregunta se esperaba: %s y se obtuvo: %s",
 			TERCERA_RESPUESTA_PRIMERA_PREGUNTA, primera_preguanta.Respuestas[2])
+	}
+
+	for _, pregunta := range examen.Preguntas {
+		if pregunta.estudiante == nil {
+			t.Error("FALLO: Todas las preguntas deberían contener un estudiante")
+		}
 	}
 }
