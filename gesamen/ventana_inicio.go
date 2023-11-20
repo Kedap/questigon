@@ -8,10 +8,12 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func NuevaVentanaIncio(a fyne.App, ventanaSiguiente fyne.Window, e *Estudiante) fyne.Window {
+func NuevaVentanaInicio(a fyne.App, ventanaSiguiente fyne.Window, e *Estudiante) fyne.Window {
 	ventanaInicio := a.NewWindow("Bienvenido: ingresa tus datos")
 	nombre := widget.NewEntry()
+	nombre.SetPlaceHolder("Ej: Juan Perez Martinez")
 	grupo := widget.NewEntry()
+	grupo.SetPlaceHolder("Ej: 4151")
 	instrucciones := widget.NewLabel("Ingresa tus datos")
 	funcConfirmacion := func(c bool) {
 		if c {
