@@ -30,9 +30,10 @@ func NuevaVentanaIncio(a fyne.App, ventanaSiguiente fyne.Window, e *Estudiante) 
 		OnSubmit: func() {
 			nGrupo, err := strconv.Atoi(grupo.Text)
 			if err != nil {
-				dialog.NewInformation("Error",
+				error := dialog.NewInformation("Error",
 					"El grupo debe de ser un numero entero chico",
 					ventanaInicio)
+				error.Show()
 				return
 			}
 			e.Nombre = nombre.Text
