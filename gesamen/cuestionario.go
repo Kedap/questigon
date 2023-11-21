@@ -26,7 +26,7 @@ func NuevoCuestionario(c Cuestionario) fyne.Window {
 		"Responder",
 		theme.ConfirmIcon(),
 		func() {
-			ventanaCuestionario.Close()
+			ventanaCuestionario.Hide()
 			c.ventanaSiguiente.Show()
 		},
 	)

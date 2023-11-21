@@ -17,7 +17,7 @@ func NuevaVentanaInicio(a fyne.App, ventanaSiguiente fyne.Window, e *Estudiante)
 	instrucciones := widget.NewLabel("Ingresa tus datos")
 	funcConfirmacion := func(c bool) {
 		if c {
-			ventanaInicio.Close()
+			ventanaInicio.Hide()
 			ventanaSiguiente.Show()
 		}
 	}
