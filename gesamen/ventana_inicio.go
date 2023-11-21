@@ -19,6 +19,7 @@ func NuevaVentanaInicio(a fyne.App, ventanaSiguiente fyne.Window, e *Estudiante)
 		if c {
 			ventanaInicio.Hide()
 			ventanaSiguiente.Show()
+			ventanaInicio.Close()
 		}
 	}
 	confirmacion := dialog.NewConfirm("¿Estas seguro de continuar?", "¿Ingresaste bien tus datos?",

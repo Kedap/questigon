@@ -8,26 +8,31 @@ import (
 )
 
 type Cuestionario struct {
-	nombre           string
-	app              fyne.App
-	preguntas        *[]Pregunta
-	ventanaSiguiente fyne.Window
+	nombre    string
+	app       fyne.App
+	preguntas *[]Pregunta
 }
 
 func NuevoCuestionario(c Cuestionario) fyne.Window {
 	ventanaCuestionario := c.app.NewWindow(c.nombre)
 	contenedorCuestionario := container.NewVBox()
 	preguntas := c.preguntas
+	var estudiante *Estudiante
 	for i, p := range *preguntas {
 		preguntaContenedor := p.aContenedor(preguntas, i)
 		contenedorCuestionario.Add(preguntaContenedor)
+		if i == len(*preguntas)-1 {
+			estudiante = p.estudiante
+		}
 	}
 	btnResponder := widget.NewButtonWithIcon(
 		"Responder",
 		theme.ConfirmIcon(),
 		func() {
 			ventanaCuestionario.Hide()
-			c.ventanaSiguiente.Show()
+			resultados := NuevoResultados(c.app, estudiante, len(*preguntas))
+			resultados.Show()
+			ventanaCuestionario.Close()
 		},
 	)
 	contenedorCuestionario.Add(btnResponder)
