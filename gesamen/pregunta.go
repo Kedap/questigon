@@ -21,11 +21,6 @@ func (p *Pregunta) Responder(respuesta string) {
 	} else if respuesta != p.Respuestas[p.RespuestaCorrecta-1] && p.resuelta {
 		p.estudiante.RespuestasCorrectas--
 		p.resuelta = false
-	} else if respuesta != p.Respuestas[p.RespuestaCorrecta-1] && !p.resuelta {
-		if p.estudiante.RespuestasCorrectas != 0 {
-			p.estudiante.RespuestasCorrectas--
-			p.resuelta = false
-		}
 	}
 }
 
@@ -33,9 +28,10 @@ func (p *Pregunta) Responder(respuesta string) {
 // opciones y una función que la resuelve `p.Responder(respuestaElegida)`
 func (p *Pregunta) aContenedor(preguntas *[]Pregunta, id int) *fyne.Container {
 	contenedorPregunta := container.NewVBox(widget.NewLabel(p.Pregunta))
+	refPreguntas := *preguntas
+	preguntaActual := refPreguntas[id]
 	opciones := widget.NewRadioGroup(p.Respuestas, func(r string) {
-		preguntas := *preguntas
-		preguntaActual := preguntas[id]
+		preguntaActual.Responder(r)
 		preguntaActual.Responder(r)
 	})
 	contenedorPregunta.Add(opciones)
