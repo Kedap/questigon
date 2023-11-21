@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
@@ -39,7 +37,6 @@ func (p *Pregunta) aContenedor(preguntas *[]Pregunta, id int) *fyne.Container {
 		preguntas := *preguntas
 		preguntaActual := preguntas[id]
 		preguntaActual.Responder(r)
-		log.Println(p.estudiante.RespuestasCorrectas, preguntaActual.resuelta)
 	})
 	contenedorPregunta.Add(opciones)
 	return contenedorPregunta
