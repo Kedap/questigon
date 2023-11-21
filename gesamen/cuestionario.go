@@ -18,8 +18,8 @@ func NuevoCuestionario(c Cuestionario) fyne.Window {
 	ventanaCuestionario := c.app.NewWindow(c.nombre)
 	contenedorCuestionario := container.NewVBox()
 	preguntas := c.preguntas
-	for _, p := range *preguntas {
-		preguntaContenedor := p.aContenedor()
+	for i, p := range *preguntas {
+		preguntaContenedor := p.aContenedor(preguntas, i)
 		contenedorCuestionario.Add(preguntaContenedor)
 	}
 	btnResponder := widget.NewButtonWithIcon(
