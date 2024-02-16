@@ -2,6 +2,7 @@
 
 Cuestionario en Go
 
-![Captura](./captura.png)
+![Captura tui](./captura.png)
+![Captura gui](./captura2.png)
 
 Lee el archivo `examen.json` que puede ser creado con `hpreguntas`
